@@ -5,4 +5,7 @@ public interface Item {
     public String getDescripcion();
     public double getPrecioBase();
     public double getPrecioFinal();
+
+    //public void decrementarCupos(); 
+    //si el estado de la reserva pasa a confirmada 
 }
