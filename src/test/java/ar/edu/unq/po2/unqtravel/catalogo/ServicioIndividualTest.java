@@ -1,6 +1,6 @@
 package ar.edu.unq.po2.unqtravel.catalogo;
 
-import ar.edu.unq.po2.unqtravel.catalogo.ServicioIndividual.ServicioIndividual;
+import ar.edu.unq.po2.unqtravel.Catalogo.ServicioIndividual.ServicioIndividual;
 import ar.edu.unq.po2.unqtravel.catalogo.atributos.AtributoDinamico;
 import ar.edu.unq.po2.unqtravel.catalogo.atributos.TipoString;
 import ar.edu.unq.po2.unqtravel.catalogo.atributos.ValorAtributo;

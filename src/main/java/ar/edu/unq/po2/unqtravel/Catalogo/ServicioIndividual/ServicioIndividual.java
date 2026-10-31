@@ -1,9 +1,6 @@
 package ar.edu.unq.po2.unqtravel.Catalogo.ServicioIndividual;
-import java.util.List;
 
 import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
-
-import ar.edu.unq.po2.unqtravel.catalogo.Item;
 import ar.edu.unq.po2.unqtravel.catalogo.atributos.ValorAtributo;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +19,9 @@ public class ServicioIndividual implements Item {
     private List<ValorAtributo> atributos;
 
     public ServicioIndividual(int id, String nombre, int cupoMaximo, String proveedor, String categoria, String descripcion, Double precioBase, Double descuento) {
+        if (cupoMaximo < 0) {
+            throw new IllegalArgumentException("El cupo maximo no puede ser negativo");
+        }
         this.id = id;
         this.nombre = nombre;
         this.cupoMaximo = cupoMaximo;

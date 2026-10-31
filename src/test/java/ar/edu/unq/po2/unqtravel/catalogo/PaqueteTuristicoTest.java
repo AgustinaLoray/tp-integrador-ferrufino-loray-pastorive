@@ -1,6 +1,7 @@
 package ar.edu.unq.po2.unqtravel.catalogo;
 
-import ar.edu.unq.po2.unqtravel.catalogo.PaqueteTuristico.PaqueteTuristico;
+import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
+import ar.edu.unq.po2.unqtravel.Catalogo.PaqueteTuristico.PaqueteTuristico;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

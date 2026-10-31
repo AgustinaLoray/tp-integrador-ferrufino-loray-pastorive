@@ -1,9 +1,9 @@
 package ar.edu.unq.po2.unqtravel.Catalogo.PaqueteTuristico;
 
 import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
-
-import java.util.ArrayList; 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PaqueteTuristico implements Item {
     private String nombre;
@@ -11,7 +11,7 @@ public class PaqueteTuristico implements Item {
     private Double descuento;
     private List<Item> items;
 
-    public PaqueteTuristico (String n, String des, Double d) {
+    public PaqueteTuristico(String n, String des, Double d) {
         this.nombre = n;
         this.descripcion = des;
         this.descuento = d;
@@ -19,7 +19,7 @@ public class PaqueteTuristico implements Item {
     }
 
     public void agregarItem(Item item) {
-        this.items.add(java.util.Objects.requireNonNull(item, "El item no puede ser null"));
+        this.items.add(Objects.requireNonNull(item, "El item no puede ser null"));
     }
 
     public void quitarItem(Item item) {
@@ -44,13 +44,22 @@ public class PaqueteTuristico implements Item {
 
     @Override
     public void incrementarCupo() {
-        for (Item item : this.items) {
-            item.incrementarCupo();
+        List<Item> liberados = new ArrayList<>();
+        try {
+            for (Item item : this.items) {
+                item.incrementarCupo();
+                liberados.add(item);
+            }
+        } catch (RuntimeException error) {
+            for (int i = liberados.size() - 1; i >= 0; i--) {
+                liberados.get(i).decrementarCupo();
+            }
+            throw error;
         }
     }
 
     public List<Item> getItems() {
-        return this.items;
+        return List.copyOf(this.items);
     }
 
     public Double getDescuento() {
@@ -58,7 +67,7 @@ public class PaqueteTuristico implements Item {
     }
 
     public void setDescuento(Double descuento) {
-        this.descuento = descuento != null ? descuento : 0.0;    
+        this.descuento = descuento != null ? descuento : 0.0;
     }
 
     @Override
@@ -72,12 +81,12 @@ public class PaqueteTuristico implements Item {
     }
 
     @Override
-    public double getPrecioBase(){
+    public double getPrecioBase() {
         return this.items.stream().mapToDouble(i -> i.getPrecioBase()).sum();
     }
 
     @Override
-    public double getPrecioFinal(){
+    public double getPrecioFinal() {
         double sumaPrecioFinalHijos = this.items.stream().mapToDouble(i -> i.getPrecioFinal()).sum();
         double descuentoFinal = 1.0 - (this.descuento != null ? this.descuento : 0.0);
         return sumaPrecioFinalHijos * descuentoFinal;

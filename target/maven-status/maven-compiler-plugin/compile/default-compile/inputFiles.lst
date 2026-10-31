@@ -1,11 +1,18 @@
-/home/agustina-loray/Documentos/Facultad/2026/2do cuatri/Objetos II/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Catalogo/Item/Item.java
-/home/agustina-loray/Documentos/Facultad/2026/2do cuatri/Objetos II/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Catalogo/PaqueteTuristico/PaqueteTuristico.java
-/home/agustina-loray/Documentos/Facultad/2026/2do cuatri/Objetos II/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Catalogo/ServicioIndividual/ServicioIndividual.java
-/home/agustina-loray/Documentos/Facultad/2026/2do cuatri/Objetos II/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Estados/Cancelada.java
-/home/agustina-loray/Documentos/Facultad/2026/2do cuatri/Objetos II/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Estados/CheckIn.java
-/home/agustina-loray/Documentos/Facultad/2026/2do cuatri/Objetos II/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Estados/Confirmada.java
-/home/agustina-loray/Documentos/Facultad/2026/2do cuatri/Objetos II/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Estados/EnCurso.java
-/home/agustina-loray/Documentos/Facultad/2026/2do cuatri/Objetos II/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Estados/Estado.java
-/home/agustina-loray/Documentos/Facultad/2026/2do cuatri/Objetos II/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Estados/Finalizada.java
-/home/agustina-loray/Documentos/Facultad/2026/2do cuatri/Objetos II/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Estados/SolicitudPendiente.java
-/home/agustina-loray/Documentos/Facultad/2026/2do cuatri/Objetos II/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Reserva/Reserva.java
+/home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Catalogo/Item/Item.java
+/home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Catalogo/PaqueteTuristico/PaqueteTuristico.java
+/home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Catalogo/ServicioIndividual/ServicioIndividual.java
+/home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Catalogo/atributos/AtributoDinamico.java
+/home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Catalogo/atributos/TipoAtributo.java
+/home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Catalogo/atributos/TipoBoolean.java
+/home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Catalogo/atributos/TipoDate.java
+/home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Catalogo/atributos/TipoInteger.java
+/home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Catalogo/atributos/TipoString.java
+/home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Catalogo/atributos/ValorAtributo.java
+/home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Estados/Cancelada.java
+/home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Estados/CheckIn.java
+/home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Estados/Confirmada.java
+/home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Estados/EnCurso.java
+/home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Estados/Estado.java
+/home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Estados/Finalizada.java
+/home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Estados/SolicitudPendiente.java
+/home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/main/java/ar/edu/unq/po2/unqtravel/Reserva/Reserva.java
