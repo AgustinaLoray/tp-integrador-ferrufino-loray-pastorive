@@ -1,0 +1,98 @@
+package ar.edu.unq.po2.unqtravel.catalogo;
+
+import ar.edu.unq.po2.unqtravel.catalogo.PaqueteTuristico.PaqueteTuristico;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class PaqueteTuristicoTest {
+    private PaqueteTuristico paquete;
+
+    @BeforeEach
+    void setUp() {
+        paquete = new PaqueteTuristico("Escapada", "Fin de semana", 0.10);
+    }
+
+    @Test
+    void retornaNombreYDescripcion() {
+        assertEquals("Escapada", paquete.getNombre());
+        assertEquals("Fin de semana", paquete.getDescripcion());
+    }
+
+    @Test
+    void paqueteVacioTienePreciosEnCero() {
+        assertEquals(0.0, paquete.getPrecioBase());
+        assertEquals(0.0, paquete.getPrecioFinal());
+    }
+
+    @Test
+    void sumaLosPreciosBaseYAplicaElDescuentoAlPrecioFinal() {
+        paquete.agregarItem(new ItemDePrueba(100.0, 80.0));
+        paquete.agregarItem(new ItemDePrueba(50.0, 40.0));
+
+        assertEquals(150.0, paquete.getPrecioBase());
+        assertEquals(108.0, paquete.getPrecioFinal(), 0.001);
+    }
+
+    @Test
+    void agregarYQuitarItemsActualizaLosPrecios() {
+        ItemDePrueba item = new ItemDePrueba(100.0, 80.0);
+        paquete.agregarItem(item);
+
+        assertEquals(100.0, paquete.getPrecioBase());
+        assertEquals(72.0, paquete.getPrecioFinal(), 0.001);
+
+        paquete.quitarItem(item);
+
+        assertEquals(0.0, paquete.getPrecioBase());
+        assertEquals(0.0, paquete.getPrecioFinal());
+    }
+
+    @Test
+    void descuentoNuloSeInterpretaComoCero() {
+        paquete.setDescuento(null);
+        paquete.agregarItem(new ItemDePrueba(100.0, 80.0));
+
+        assertEquals(0.0, paquete.getDescuento());
+        assertEquals(80.0, paquete.getPrecioFinal());
+    }
+
+    private static class ItemDePrueba implements Item {
+        private final double precioBase;
+        private final double precioFinal;
+
+        private ItemDePrueba(double precioBase, double precioFinal) {
+            this.precioBase = precioBase;
+            this.precioFinal = precioFinal;
+        }
+
+        @Override
+        public String getNombre() {
+            return "Item";
+        }
+
+        @Override
+        public String getDescripcion() {
+            return "Item de prueba";
+        }
+
+        @Override
+        public double getPrecioBase() {
+            return precioBase;
+        }
+
+        @Override
+        public double getPrecioFinal() {
+            return precioFinal;
+        }
+
+        @Override
+        public void decrementarCupo() {
+        }
+
+        @Override
+        public void incrementarCupo() {
+        }
+    }
+}

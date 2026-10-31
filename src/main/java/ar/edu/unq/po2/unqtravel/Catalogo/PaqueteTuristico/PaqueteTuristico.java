@@ -18,11 +18,34 @@ public class PaqueteTuristico implements Item {
     }
 
     public void agregarItem(Item item) {
-        this.items.add(item);
+        this.items.add(java.util.Objects.requireNonNull(item, "El item no puede ser null"));
     }
 
     public void quitarItem(Item item) {
         this.items.remove(item);
+    }
+
+    @Override
+    public void decrementarCupo() {
+        List<Item> reservados = new ArrayList<>();
+        try {
+            for (Item item : this.items) {
+                item.decrementarCupo();
+                reservados.add(item);
+            }
+        } catch (RuntimeException error) {
+            for (int i = reservados.size() - 1; i >= 0; i--) {
+                reservados.get(i).incrementarCupo();
+            }
+            throw error;
+        }
+    }
+
+    @Override
+    public void incrementarCupo() {
+        for (Item item : this.items) {
+            item.incrementarCupo();
+        }
     }
 
     public List<Item> getItems() {

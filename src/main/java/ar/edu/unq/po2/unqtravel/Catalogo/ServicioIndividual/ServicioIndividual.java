@@ -1,5 +1,11 @@
 package ar.edu.unq.po2.unqtravel.catalogo.ServicioIndividual;
 
+import ar.edu.unq.po2.unqtravel.catalogo.Item;
+import ar.edu.unq.po2.unqtravel.catalogo.atributos.ValorAtributo;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 public class ServicioIndividual implements Item {
     private int id;
     private String nombre;
@@ -8,7 +14,8 @@ public class ServicioIndividual implements Item {
     private String descripcion;
     private Double precioBase;
     private Double descuento;
-    private int cupoMaximo; // agregar al UML
+    private int cupoMaximo;
+    private int cuposDisponibles;
     private List<ValorAtributo> atributos;
 
     public ServicioIndividual(int id, String nombre, int cupoMaximo, String proveedor, String categoria, String descripcion, Double precioBase, Double descuento) {
@@ -20,11 +27,12 @@ public class ServicioIndividual implements Item {
         this.descripcion = descripcion;
         this.precioBase = precioBase;
         this.descuento = descuento;
+        this.cuposDisponibles = cupoMaximo;
         this.atributos = new ArrayList<>();
     }
 
     public void agregarAtributo(ValorAtributo atributo) {
-        this.atributos.add(atributo);
+        this.atributos.add(Objects.requireNonNull(atributo, "El atributo no puede ser null"));
     }
 
     public boolean esValido() {
@@ -47,6 +55,14 @@ public class ServicioIndividual implements Item {
         return cupoMaximo;
     }
 
+    public int getCuposDisponibles() {
+        return cuposDisponibles;
+    }
+
+    public List<ValorAtributo> getAtributos() {
+        return atributos;
+    }
+
     @Override
     public String getNombre() {
         return nombre;
@@ -57,5 +73,30 @@ public class ServicioIndividual implements Item {
         return descripcion;
     }
 
+    @Override
+    public double getPrecioBase() {
+        return this.precioBase;
+    }
 
+    @Override
+    public double getPrecioFinal() {
+        double porcentajeDescuento = this.descuento != null ? this.descuento : 0.0;
+        return this.precioBase * (1.0 - porcentajeDescuento);
+    }
+
+    @Override
+    public void decrementarCupo() {
+        if (this.cuposDisponibles == 0) {
+            throw new IllegalStateException("No hay cupos disponibles para " + this.nombre);
+        }
+        this.cuposDisponibles--;
+    }
+
+    @Override
+    public void incrementarCupo() {
+        if (this.cuposDisponibles >= this.cupoMaximo) {
+            throw new IllegalStateException("No hay cupos reservados para liberar en " + this.nombre);
+        }
+        this.cuposDisponibles++;
+    }
 }

@@ -1,17 +1,22 @@
 package ar.edu.unq.po2.unqtravel.catalogo.Reserva;
+
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Objects;
 
-import ar.edu.unq.po2.unqtravel.catalogo.Item.Item;
+import ar.edu.unq.po2.unqtravel.catalogo.Item;
 import ar.edu.unq.po2.unqtravel.catalogo.Estados.*;
 
 public class Reserva {
     private Estado estado;
-    private List<Item> items = new ArrayList<>();
-    //faltan cosas del uml 
+    private final List<Item> items = new ArrayList<>();
 
     public Reserva() {
-        this.estado = new SolicitudPendiente(this); // se crea siempre en solicitud pendiente
+        this.estado = new SolicitudPendiente(this);
+    }
+
+    public List<Item> getItems() {
+        return List.copyOf(items);
     }
 
     public void agregarItem(Item item) {
@@ -22,9 +27,16 @@ public class Reserva {
         this.estado.quitarItem(item);
     }
 
+    public void agregarItemPendiente(Item item) {
+        items.add(Objects.requireNonNull(item, "El item no puede ser null"));
+    }
+
+    public void quitarItemPendiente(Item item) {
+        items.remove(item);
+    }
+
     public void cambiarEstado(Estado estado) {
-        this.estado = estado;
-        // notificar observes, mas adelante
+        this.estado = Objects.requireNonNull(estado, "El estado no puede ser null");
     }
 
     public void confirmar() {
@@ -47,13 +59,25 @@ public class Reserva {
         this.estado.cancelar();
     }
 
-    public void bloquearCupoDisponible() { //para cada item de la reserva, decrementa el cupo si el estado de la reserva es CONFIRMADA
-        for (Item item : items) { 
-            item.decrementarCupo(); 
+    public void bloquearCupoDisponible() {
+        List<Item> reservados = new ArrayList<>();
+        try {
+            for (Item item : items) {
+                item.decrementarCupo();
+                reservados.add(item);
+            }
+        } catch (RuntimeException error) {
+            for (int i = reservados.size() - 1; i >= 0; i--) {
+                reservados.get(i).incrementarCupo();
+            }
+            throw error;
         }
-    } 
+    }
 
-    public void liberarCupos() {} 
-    public void generarReembolso(double monto) {} 
+    public void liberarCupos() {
+        for (Item item : items) {
+            item.incrementarCupo();
+        }
+    }
 
 }
