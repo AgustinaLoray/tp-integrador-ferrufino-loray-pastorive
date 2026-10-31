@@ -1,11 +1,10 @@
-package ar.edu.unq.po2.unqtravel.catalogo.Reserva;
-
+package ar.edu.unq.po2.unqtravel.Reserva;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import ar.edu.unq.po2.unqtravel.catalogo.Item;
-import ar.edu.unq.po2.unqtravel.catalogo.Estados.*;
+import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
+import ar.edu.unq.po2.unqtravel.Estados.*;
 
 public class Reserva {
     private Estado estado;
@@ -17,6 +16,22 @@ public class Reserva {
 
     public List<Item> getItems() {
         return List.copyOf(items);
+    }
+
+    public Estado getEstado() {
+        return this.estado;
+    }
+
+    public void agregarItemDirecto(Item item) {
+        this.items.add(item);
+    }
+
+    public void quitarItemDirecto(Item item) {
+        this.items.remove(item);
+    }
+
+    public List<Item> getItems() {
+        return this.items;
     }
 
     public void agregarItem(Item item) {
@@ -59,18 +74,9 @@ public class Reserva {
         this.estado.cancelar();
     }
 
-    public void bloquearCupoDisponible() {
-        List<Item> reservados = new ArrayList<>();
-        try {
-            for (Item item : items) {
-                item.decrementarCupo();
-                reservados.add(item);
-            }
-        } catch (RuntimeException error) {
-            for (int i = reservados.size() - 1; i >= 0; i--) {
-                reservados.get(i).incrementarCupo();
-            }
-            throw error;
+    public void bloquearCupoDisponible() { //para cada item de la reserva, decrementa el cupo si el estado de la reserva es CONFIRMADA
+        for (Item item : items) { 
+            //item.decrementarCupo(); 
         }
     }
 

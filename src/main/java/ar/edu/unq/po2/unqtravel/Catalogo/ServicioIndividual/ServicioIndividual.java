@@ -1,4 +1,7 @@
-package ar.edu.unq.po2.unqtravel.catalogo.ServicioIndividual;
+package ar.edu.unq.po2.unqtravel.Catalogo.ServicioIndividual;
+import java.util.List;
+
+import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
 
 import ar.edu.unq.po2.unqtravel.catalogo.Item;
 import ar.edu.unq.po2.unqtravel.catalogo.atributos.ValorAtributo;

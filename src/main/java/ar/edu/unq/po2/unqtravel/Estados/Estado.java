@@ -1,8 +1,7 @@
-package ar.edu.unq.po2.unqtravel.catalogo.Estados;
+package ar.edu.unq.po2.unqtravel.Estados;
 
-import ar.edu.unq.po2.unqtravel.catalogo.Reserva.Reserva;
-import ar.edu.unq.po2.unqtravel.catalogo.Item;
-import java.util.Objects;
+import ar.edu.unq.po2.unqtravel.Reserva.Reserva;
+import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
 
 public class Estado {
     protected Reserva reserva;
@@ -16,30 +15,26 @@ public class Estado {
     }
 
     public void quitarItem(Item item) {
-        throw transicionInvalida("quitar items");
+        throw new UnsupportedOperationException("No se puede quitar items");
     }
 
     public void confirmar() {
-        throw transicionInvalida("confirmar");
+        throw new UnsupportedOperationException("No se puede confirmar la reserva en el estado actual.");
     }
 
     public void checkIn() {
-        throw transicionInvalida("hacer check-in");
+        throw new UnsupportedOperationException("No se puede realizar el check-in en el estado actual.");
     }
 
     public void iniciarViaje() {
-        throw transicionInvalida("iniciar el viaje");
+        throw new UnsupportedOperationException("No se puede iniciar el viaje en el estado actual.");
     }
 
     public void finalizar() {
-        throw transicionInvalida("finalizar");
+        throw new UnsupportedOperationException("No se puede finalizar la reserva en el estado actual.");
     }
 
     public void cancelar() {
-        throw transicionInvalida("cancelar");
-    }
-
-    private IllegalStateException transicionInvalida(String accion) {
-        return new IllegalStateException("No se puede " + accion + " desde " + getClass().getSimpleName());
+        throw new UnsupportedOperationException("No se puede cancelar la reserva en el estado actual.");
     }
 }

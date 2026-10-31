@@ -1,7 +1,6 @@
-package ar.edu.unq.po2.unqtravel.catalogo.Estados;
-
-import ar.edu.unq.po2.unqtravel.catalogo.Item;
-import ar.edu.unq.po2.unqtravel.catalogo.Reserva.Reserva;
+package ar.edu.unq.po2.unqtravel.Estados;
+import ar.edu.unq.po2.unqtravel.Reserva.Reserva;
+import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
 
 public class SolicitudPendiente extends Estado {
 
@@ -11,12 +10,12 @@ public class SolicitudPendiente extends Estado {
 
     @Override
     public void agregarItem(Item item) {
-        this.reserva.agregarItemPendiente(item);
+        this.reserva.agregarItemDirecto(item);
     }
 
     @Override
     public void quitarItem(Item item) {
-        this.reserva.quitarItemPendiente(item);
+        this.reserva.quitarItemDirecto(item);
     }
 
     @Override

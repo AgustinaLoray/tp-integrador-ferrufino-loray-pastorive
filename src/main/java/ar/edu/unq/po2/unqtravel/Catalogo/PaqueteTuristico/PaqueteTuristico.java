@@ -1,6 +1,7 @@
-package ar.edu.unq.po2.unqtravel.catalogo.PaqueteTuristico;
+package ar.edu.unq.po2.unqtravel.Catalogo.PaqueteTuristico;
 
-import ar.edu.unq.po2.unqtravel.catalogo.Item;
+import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
+
 import java.util.ArrayList; 
 import java.util.List;
 
