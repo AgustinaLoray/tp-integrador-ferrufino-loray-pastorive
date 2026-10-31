@@ -1,4 +1,5 @@
-import ar.edu.unq.po2.unqtravel.catalogo.Reserva;
+package ar.edu.unq.po2.unqtravel.Estados;
+import ar.edu.unq.po2.unqtravel.Reserva.Reserva;
 
 public class Confirmada extends Estado {
 

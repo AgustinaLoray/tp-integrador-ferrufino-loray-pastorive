@@ -1,4 +1,4 @@
-package ar.edu.unq.po2.unqtravel.catalogo;
+package ar.edu.unq.po2.unqtravel.Catalogo.Item;
 
 public interface Item {
     public String getNombre();

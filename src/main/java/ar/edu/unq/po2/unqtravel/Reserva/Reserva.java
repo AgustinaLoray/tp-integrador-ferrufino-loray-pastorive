@@ -1,9 +1,9 @@
-package ar.edu.unq.po2.unqtravel.catalogo.Reserva;
+package ar.edu.unq.po2.unqtravel.Reserva;
 import java.util.List;
 import java.util.ArrayList;
 
-import ar.edu.unq.po2.unqtravel.catalogo.Item.Item;
-import ar.edu.unq.po2.unqtravel.catalogo.Estados.*;
+import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
+import ar.edu.unq.po2.unqtravel.Estados.*;
 
 public class Reserva {
     private Estado estado;
@@ -12,6 +12,22 @@ public class Reserva {
 
     public Reserva() {
         this.estado = new SolicitudPendiente(this); // se crea siempre en solicitud pendiente
+    }
+
+    public Estado getEstado() {
+        return this.estado;
+    }
+
+    public void agregarItemDirecto(Item item) {
+        this.items.add(item);
+    }
+
+    public void quitarItemDirecto(Item item) {
+        this.items.remove(item);
+    }
+
+    public List<Item> getItems() {
+        return this.items;
     }
 
     public void agregarItem(Item item) {
@@ -49,7 +65,7 @@ public class Reserva {
 
     public void bloquearCupoDisponible() { //para cada item de la reserva, decrementa el cupo si el estado de la reserva es CONFIRMADA
         for (Item item : items) { 
-            item.decrementarCupo(); 
+            //item.decrementarCupo(); 
         }
     } 
 
