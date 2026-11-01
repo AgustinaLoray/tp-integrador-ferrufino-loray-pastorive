@@ -14,7 +14,9 @@ public class EnCurso extends Estado {
 
     @Override
     public void cancelar() {
-        // generar reembolso de los servicios no disfrutados 
+        this.reserva.liberarCupos(); 
+        double reembolso = this.reserva.getCostoServicios();
+        this.reserva.generarVoucherDeReembolso(reembolso);
         reserva.cambiarEstado(new Cancelada(reserva));
     }
 }

@@ -15,7 +15,8 @@ public class CheckIn extends Estado {
     @Override
     public void cancelar() {
         reserva.liberarCupos();
-        // reembolso = servicios + tasas
+        double reembolso = this.reserva.getCostoServicios() + this.reserva.getCostoTasas();
+        this.reserva.generarVoucherDeReembolso(reembolso); 
         reserva.cambiarEstado(new Cancelada(reserva));
     }
 }

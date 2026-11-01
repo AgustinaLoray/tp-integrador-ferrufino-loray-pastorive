@@ -8,6 +8,7 @@ import ar.edu.unq.po2.unqtravel.Estados.*;
 
 public class Reserva {
     private Estado estado;
+    private double montoReembolso;
     private final List<Item> items = new ArrayList<>();
 
     public Reserva() {
@@ -28,6 +29,10 @@ public class Reserva {
 
     public List<Item> getItems() {
         return this.items;
+    }
+
+    public double getReembolso(){
+        return this.montoReembolso;
     }
 
     public void agregarItem(Item item) {
@@ -70,9 +75,9 @@ public class Reserva {
         this.estado.cancelar();
     }
 
-    public void bloquearCupoDisponible() { //para cada item de la reserva, decrementa el cupo si el estado de la reserva es CONFIRMADA
+    public void bloquearCupoDisponible() { 
         for (Item item : items) { 
-            //item.decrementarCupo(); 
+            item.decrementarCupo(); 
         }
     }
 
@@ -80,6 +85,18 @@ public class Reserva {
         for (Item item : items) {
             item.incrementarCupo();
         }
+    }
+
+    public double getCostoServicios() {
+        return this.items.stream().mapToDouble(i -> i.getPrecioFinal()).sum();
+    }
+
+    public double getCostoTasas() {
+        return 0.0; //completar modulo 2.3
+    }
+
+    public void generarVoucherDeReembolso(double monto) {
+        this.montoReembolso = monto;
     }
 
 }
