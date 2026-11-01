@@ -14,10 +14,6 @@ public class Reserva {
         this.estado = new SolicitudPendiente(this);
     }
 
-    public List<Item> getItems() {
-        return List.copyOf(items);
-    }
-
     public Estado getEstado() {
         return this.estado;
     }

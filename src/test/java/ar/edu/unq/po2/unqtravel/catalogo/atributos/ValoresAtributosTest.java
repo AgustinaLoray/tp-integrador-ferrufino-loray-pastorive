@@ -1,11 +1,11 @@
 package ar.edu.unq.po2.unqtravel.catalogo.atributos;
 
-import ar.edu.unq.po2.unqtravel.catalogo.atributos.AtributoDinamico;
-import ar.edu.unq.po2.unqtravel.catalogo.atributos.TipoBoolean;
-import ar.edu.unq.po2.unqtravel.catalogo.atributos.TipoDate;
-import ar.edu.unq.po2.unqtravel.catalogo.atributos.TipoInteger;
-import ar.edu.unq.po2.unqtravel.catalogo.atributos.TipoString;
-import ar.edu.unq.po2.unqtravel.catalogo.atributos.ValorAtributo;
+import ar.edu.unq.po2.unqtravel.Catalogo.atributos.AtributoDinamico;
+import ar.edu.unq.po2.unqtravel.Catalogo.atributos.TipoBoolean;
+import ar.edu.unq.po2.unqtravel.Catalogo.atributos.TipoDate;
+import ar.edu.unq.po2.unqtravel.Catalogo.atributos.TipoInteger;
+import ar.edu.unq.po2.unqtravel.Catalogo.atributos.TipoString;
+import ar.edu.unq.po2.unqtravel.Catalogo.atributos.ValorAtributo;
 import java.util.Date;
 import org.junit.jupiter.api.Test;
 

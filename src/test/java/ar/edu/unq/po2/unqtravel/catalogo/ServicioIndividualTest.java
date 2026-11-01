@@ -1,9 +1,9 @@
 package ar.edu.unq.po2.unqtravel.catalogo;
 
 import ar.edu.unq.po2.unqtravel.Catalogo.ServicioIndividual.ServicioIndividual;
-import ar.edu.unq.po2.unqtravel.catalogo.atributos.AtributoDinamico;
-import ar.edu.unq.po2.unqtravel.catalogo.atributos.TipoString;
-import ar.edu.unq.po2.unqtravel.catalogo.atributos.ValorAtributo;
+import ar.edu.unq.po2.unqtravel.Catalogo.atributos.AtributoDinamico;
+import ar.edu.unq.po2.unqtravel.Catalogo.atributos.TipoString;
+import ar.edu.unq.po2.unqtravel.Catalogo.atributos.ValorAtributo;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

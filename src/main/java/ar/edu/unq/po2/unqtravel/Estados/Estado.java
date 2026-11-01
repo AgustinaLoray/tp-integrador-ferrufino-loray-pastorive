@@ -1,6 +1,9 @@
 package ar.edu.unq.po2.unqtravel.Estados;
 
 import ar.edu.unq.po2.unqtravel.Reserva.Reserva;
+
+import java.util.Objects;
+
 import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
 
 public class Estado {
@@ -11,7 +14,7 @@ public class Estado {
     }
 
     public void agregarItem(Item item) {
-        throw transicionInvalida("agregar items");
+        throw new UnsupportedOperationException("No se puede agregar items");
     }
 
     public void quitarItem(Item item) {

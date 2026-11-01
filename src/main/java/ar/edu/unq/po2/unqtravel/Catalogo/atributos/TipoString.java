@@ -1,4 +1,4 @@
-package ar.edu.unq.po2.unqtravel.catalogo.atributos;
+package ar.edu.unq.po2.unqtravel.Catalogo.atributos;
 
 public class TipoString implements TipoAtributo {
     @Override

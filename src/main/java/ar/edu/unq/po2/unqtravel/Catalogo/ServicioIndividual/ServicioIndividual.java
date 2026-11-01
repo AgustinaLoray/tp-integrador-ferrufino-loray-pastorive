@@ -1,7 +1,7 @@
 package ar.edu.unq.po2.unqtravel.Catalogo.ServicioIndividual;
 
 import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
-import ar.edu.unq.po2.unqtravel.catalogo.atributos.ValorAtributo;
+import ar.edu.unq.po2.unqtravel.Catalogo.atributos.ValorAtributo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -20,7 +20,7 @@ public class ServicioIndividual implements Item {
 
     public ServicioIndividual(int id, String nombre, int cupoMaximo, String proveedor, String categoria, String descripcion, Double precioBase, Double descuento) {
         if (cupoMaximo < 0) {
-            throw new IllegalArgumentException("El cupo maximo no puede ser negativo");
+            throw new IllegalArgumentException("Se alcanzo el limite de cupos");
         }
         this.id = id;
         this.nombre = nombre;
@@ -35,7 +35,7 @@ public class ServicioIndividual implements Item {
     }
 
     public void agregarAtributo(ValorAtributo atributo) {
-        this.atributos.add(Objects.requireNonNull(atributo, "El atributo no puede ser null"));
+        this.atributos.add(Objects.requireNonNull(atributo, "Se debe ingresar un atributo"));
     }
 
     public boolean esValido() {

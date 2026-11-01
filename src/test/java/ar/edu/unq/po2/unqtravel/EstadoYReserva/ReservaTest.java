@@ -1,7 +1,7 @@
-package ar.edu.unq.po2.unqtravel.catalogo;
+package ar.edu.unq.po2.unqtravel.EstadoYReserva;
 
-import ar.edu.unq.po2.unqtravel.catalogo.Reserva.Reserva;
-import ar.edu.unq.po2.unqtravel.catalogo.ServicioIndividual.ServicioIndividual;
+import ar.edu.unq.po2.unqtravel.Reserva.Reserva;
+import ar.edu.unq.po2.unqtravel.Catalogo.ServicioIndividual.ServicioIndividual;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

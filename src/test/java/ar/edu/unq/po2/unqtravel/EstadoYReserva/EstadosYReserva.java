@@ -1,4 +1,4 @@
-package ar.edu.unq.po2.unqtravel;
+package ar.edu.unq.po2.unqtravel.EstadoYReserva;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
