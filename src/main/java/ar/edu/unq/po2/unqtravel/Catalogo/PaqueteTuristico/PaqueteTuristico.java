@@ -14,7 +14,7 @@ public class PaqueteTuristico implements Item {
     public PaqueteTuristico(String n, String des, Double d) {
         this.nombre = n;
         this.descripcion = des;
-        this.descuento = d;
+        this.descuento = validarDescuento(d);
         this.items = new ArrayList<>();
     }
 
@@ -67,7 +67,7 @@ public class PaqueteTuristico implements Item {
     }
 
     public void setDescuento(Double descuento) {
-        this.descuento = descuento != null ? descuento : 0.0;
+        this.descuento = validarDescuento(descuento);
     }
 
     @Override
@@ -90,5 +90,13 @@ public class PaqueteTuristico implements Item {
         double sumaPrecioFinalHijos = this.items.stream().mapToDouble(i -> i.getPrecioFinal()).sum();
         double descuentoFinal = 1.0 - (this.descuento != null ? this.descuento : 0.0);
         return sumaPrecioFinalHijos * descuentoFinal;
+    }
+
+    private double validarDescuento(Double descuento) {
+        double descuentoValidado = descuento != null ? descuento : 0.0;
+        if (descuentoValidado < 0 || descuentoValidado > 1) {
+            throw new IllegalArgumentException("El descuento debe estar entre 0 y 1");
+        }
+        return descuentoValidado;
     }
 }

@@ -22,6 +22,19 @@ public class ServicioIndividual implements Item {
         if (cupoMaximo < 0) {
             throw new IllegalArgumentException("Se alcanzo el limite de cupos");
         }
+
+        if (precioBase == null) {
+            throw new IllegalArgumentException("El precio base no puede ser null");
+        }
+        if (precioBase < 0) {
+            throw new IllegalArgumentException("El precio base no puede ser negativo");
+        }
+
+        double descuentoValidado = descuento != null ? descuento : 0.0;
+        if (descuentoValidado < 0 || descuentoValidado > 1) {
+            throw new IllegalArgumentException("El descuento debe estar entre 0 y 1");
+        }
+        
         this.id = id;
         this.nombre = nombre;
         this.cupoMaximo = cupoMaximo;
@@ -29,7 +42,7 @@ public class ServicioIndividual implements Item {
         this.categoria = categoria;
         this.descripcion = descripcion;
         this.precioBase = precioBase;
-        this.descuento = descuento;
+        this.descuento = descuentoValidado;
         this.cuposDisponibles = cupoMaximo;
         this.atributos = new ArrayList<>();
     }
@@ -63,7 +76,7 @@ public class ServicioIndividual implements Item {
     }
 
     public List<ValorAtributo> getAtributos() {
-        return atributos;
+        return List.copyOf(this.atributos);
     }
 
     @Override

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PaqueteTuristicoTest {
     private PaqueteTuristico paquete;
@@ -57,6 +58,24 @@ class PaqueteTuristicoTest {
 
         assertEquals(0.0, paquete.getDescuento());
         assertEquals(80.0, paquete.getPrecioFinal());
+    }
+
+    @Test
+    void rechazaDescuentosFueraDeRangoAlConstruirYAlActualizar() {
+        assertThrows(IllegalArgumentException.class, () -> new PaqueteTuristico("Paquete", "Descripcion", -0.01));
+        assertThrows(IllegalArgumentException.class, () -> new PaqueteTuristico("Paquete", "Descripcion", 1.01));
+        assertThrows(IllegalArgumentException.class, () -> paquete.setDescuento(-0.01));
+        assertThrows(IllegalArgumentException.class, () -> paquete.setDescuento(1.01));
+    }
+
+    @Test
+    void laListaDeItemsNoPermiteModificarElEstadoInterno() {
+        ItemDePrueba item = new ItemDePrueba(100.0, 80.0);
+        paquete.agregarItem(item);
+
+        assertThrows(UnsupportedOperationException.class, () -> paquete.getItems().clear());
+        assertEquals(1, paquete.getItems().size());
+        assertThrows(NullPointerException.class, () -> paquete.agregarItem(null));
     }
 
     private static class ItemDePrueba implements Item {

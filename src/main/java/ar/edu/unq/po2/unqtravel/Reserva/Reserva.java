@@ -20,7 +20,11 @@ public class Reserva {
     }
 
     public void agregarItemDirecto(Item item) {
-        this.items.add(item);
+        if (item == null) {
+            throw new IllegalArgumentException("El item no puede ser null");
+        } else {
+            this.items.add(item);
+        }
     }
 
     public void quitarItemDirecto(Item item) {
@@ -28,7 +32,7 @@ public class Reserva {
     }
 
     public List<Item> getItems() {
-        return this.items;
+        return List.copyOf(this.items);
     }
 
     public double getReembolso(){
@@ -75,15 +79,35 @@ public class Reserva {
         this.estado.cancelar();
     }
 
-    public void bloquearCupoDisponible() { 
-        for (Item item : items) { 
-            item.decrementarCupo(); 
+    public void bloquearCupoDisponible() {
+        List<Item> itemBloqueados = new ArrayList<>();
+
+        try {
+            for (Item item : items) {
+                item.decrementarCupo();
+                itemBloqueados.add(item);
+            }
+        } catch (RuntimeException error) {
+            for (int i = itemBloqueados.size() - 1; i >= 0; i--) {
+                itemBloqueados.get(i).incrementarCupo();
+            }
+            throw new IllegalStateException("No se pudo bloquear el cupo disponible para todos los items. Se han revertido los cambios.", error);
         }
     }
 
     public void liberarCupos() {
-        for (Item item : items) {
-            item.incrementarCupo();
+        List<Item> itemLiberados = new ArrayList<>();
+
+        try {
+            for (Item item : items) {
+                item.incrementarCupo();
+                itemLiberados.add(item);
+            }
+        } catch (RuntimeException error) {
+            for (int i = itemLiberados.size() - 1; i >= 0; i--) {
+                itemLiberados.get(i).decrementarCupo();
+            }
+            throw new IllegalStateException("No se pudo liberar el cupo para todos los items. Se han revertido los cambios.", error);
         }
     }
 

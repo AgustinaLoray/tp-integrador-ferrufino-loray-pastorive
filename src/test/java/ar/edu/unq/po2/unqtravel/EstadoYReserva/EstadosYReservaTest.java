@@ -5,12 +5,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import ar.edu.unq.po2.unqtravel.Estados.*;
-import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
 import ar.edu.unq.po2.unqtravel.Catalogo.PaqueteTuristico.PaqueteTuristico;
 import ar.edu.unq.po2.unqtravel.Catalogo.ServicioIndividual.ServicioIndividual;
 import ar.edu.unq.po2.unqtravel.Reserva.Reserva;
 
-public class EstadosYReserva {
+public class EstadosYReservaTest {
     private Reserva reserva;
     private PaqueteTuristico vuelo;
     private ServicioIndividual hotel;
@@ -93,5 +92,40 @@ public class EstadosYReserva {
         assertInstanceOf(Cancelada.class, reserva.getEstado());
         assertEquals(20, hotel.getCuposDisponibles());
         assertEquals(150000.0, reserva.getReembolso());
+    }
+
+    @Test
+    public void rechazaTransicionesNoPermitidas() {
+        assertThrows(UnsupportedOperationException.class, () -> reserva.checkIn());
+
+        reserva.confirmar();
+        assertThrows(UnsupportedOperationException.class, () -> reserva.confirmar());
+
+        reserva.checkIn();
+        reserva.iniciarViaje();
+        reserva.finalizar();
+        assertThrows(UnsupportedOperationException.class, () -> reserva.cancelar());
+    }
+
+    @Test
+    public void lasColeccionesDeReservaSonInmodificablesYRechazaItemsNulos() {
+        assertThrows(UnsupportedOperationException.class, () -> reserva.getItems().add(vuelo));
+        assertThrows(IllegalArgumentException.class, () -> reserva.agregarItem(null));
+        assertTrue(reserva.getItems().isEmpty());
+    }
+
+    @Test
+    public void revierteLosCuposSiFallaLaConfirmacionDeUnItem() {
+        ServicioIndividual sinCupo = new ServicioIndividual(
+                2, "Sin cupo", 0, "Proveedor", "Alojamiento", "", 100.0, 0.0);
+        reserva.agregarItem(hotel);
+        reserva.agregarItem(sinCupo);
+
+        IllegalStateException error = assertThrows(IllegalStateException.class, reserva::confirmar);
+
+        assertInstanceOf(IllegalStateException.class, error.getCause());
+        assertEquals(20, hotel.getCuposDisponibles());
+        assertEquals(0, sinCupo.getCuposDisponibles());
+        assertInstanceOf(SolicitudPendiente.class, reserva.getEstado());
     }
 }
