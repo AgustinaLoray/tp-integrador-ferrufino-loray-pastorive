@@ -5,11 +5,13 @@ import java.util.Objects;
 
 import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
 import ar.edu.unq.po2.unqtravel.Estados.*;
+import ar.edu.unq.po2.unqtravel.Observer.ObserverReserva;
 
 public class Reserva {
     private Estado estado;
     private double montoReembolso;
     private final List<Item> items = new ArrayList<>();
+    private final List<ObserverReserva> observers = new ArrayList<>();
 
     public Reserva() {
         this.estado = new SolicitudPendiente(this);
@@ -17,6 +19,22 @@ public class Reserva {
 
     public Estado getEstado() {
         return this.estado;
+    }
+
+    public void agregarObserver(ObserverReserva o) {
+        if (o != null) {
+            this.observers.add(o);
+        }
+    }
+
+    public void notificarObservers() {
+        for (ObserverReserva o : this.observers) {
+            o.notificar(this);
+        }
+    }
+
+    public void quitarObservador(ObserverReserva o) {
+        this.observers.remove(o);
     }
 
     public void agregarItemDirecto(Item item) {
@@ -57,6 +75,7 @@ public class Reserva {
 
     public void cambiarEstado(Estado estado) {
         this.estado = Objects.requireNonNull(estado, "El estado no puede ser null");
+        this.notificarObservers();
     }
 
     public void confirmar() {

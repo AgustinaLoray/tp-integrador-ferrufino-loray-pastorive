@@ -6,11 +6,23 @@ import java.util.Objects;
 
 import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
 
-public class Estado {
+public abstract class Estado {
     protected Reserva reserva;
 
     public Estado(Reserva reserva) {
         this.reserva = Objects.requireNonNull(reserva, "La reserva no puede ser null");
+    }
+
+    public boolean debeNotificarEmail() {
+        return false;
+    }
+
+    public boolean debeNotificarClub() {
+        return false;
+    }
+
+    public boolean debeNotificarFactura() {
+        return false;
     }
 
     public void agregarItem(Item item) {

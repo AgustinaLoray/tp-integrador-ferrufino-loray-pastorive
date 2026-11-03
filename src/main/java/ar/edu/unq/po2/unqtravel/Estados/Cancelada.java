@@ -6,4 +6,9 @@ public class Cancelada extends Estado {
     public Cancelada(Reserva reserva) {
         super(reserva);
     }
+
+    @Override 
+    public boolean debeNotificarClub() {
+        return true;
+    }
 }

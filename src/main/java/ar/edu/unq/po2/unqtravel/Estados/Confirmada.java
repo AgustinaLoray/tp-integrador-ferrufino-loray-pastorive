@@ -17,4 +17,9 @@ public class Confirmada extends Estado {
         reserva.liberarCupos();
         reserva.cambiarEstado(new Cancelada(reserva));
     }
+
+    @Override 
+    public boolean debeNotificarEmail() {
+        return true;
+    }
 }

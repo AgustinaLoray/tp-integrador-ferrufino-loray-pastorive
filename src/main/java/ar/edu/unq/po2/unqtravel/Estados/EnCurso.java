@@ -19,4 +19,9 @@ public class EnCurso extends Estado {
         this.reserva.generarVoucherDeReembolso(reembolso);
         reserva.cambiarEstado(new Cancelada(reserva));
     }
+
+    @Override 
+    public boolean debeNotificarEmail() {
+        return true;
+    }
 }

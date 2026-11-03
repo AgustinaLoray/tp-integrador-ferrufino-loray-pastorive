@@ -6,4 +6,14 @@ public class Finalizada extends Estado {
     public Finalizada(Reserva reserva) {
         super(reserva);
     }
+
+    @Override 
+    public boolean debeNotificarEmail() {
+        return true;
+    }
+
+    @Override 
+    public boolean debeNotificarFactura(){
+        return true;
+    }
 }
