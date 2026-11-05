@@ -141,5 +141,18 @@ public class Reserva {
     public void generarVoucherDeReembolso(double monto) {
         this.montoReembolso = monto;
     }
+    
+    //Metodos para la parte de traslado
+    public float getValorTotal() {
+    	return 0;
+    }
+    
+    public int getCantidadPasajeros() {
+    	return 0;
+    }
+    
+    
+    
+    
 
 }
