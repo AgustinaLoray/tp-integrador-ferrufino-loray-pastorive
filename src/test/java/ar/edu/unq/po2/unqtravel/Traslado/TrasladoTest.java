@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import ar.edu.unq.po2.unqtravel.Traslado.Direccion;
 import ar.edu.unq.po2.unqtravel.Traslado.PuntoEncuentro;
-import ar.edu.unq.po2.unqtravel.Traslado.Reserva;
+import ar.edu.unq.po2.unqtravel.Catalogo.Reserva;
 
 class TrasladoTest {
 	TrasladoEstandarAdapter trasladoEstandar;
@@ -17,9 +17,6 @@ class TrasladoTest {
 	TrasladoVip libreriaTrasladoVip;
 	Direccion brasil;
 	Reserva unaReserva;
-	
-	
-	
 	
 	@BeforeEach   
 	public void setup() {

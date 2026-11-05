@@ -10,12 +10,28 @@ public class PaqueteTuristico implements Item {
     private String descripcion;
     private Double descuento;
     private List<Item> items;
+    private String categoria;
+    private int cuposDisponibles;
 
-    public PaqueteTuristico(String n, String des, Double d) {
+    public PaqueteTuristico(String n, String des, Double d, String categoria, int cuposDisponibles) {
         this.nombre = n;
         this.descripcion = des;
         this.descuento = validarDescuento(d);
         this.items = new ArrayList<>();
+        this.categoria = categoria;
+        this.cuposDisponibles = cuposDisponibles;
+    }
+
+    public String getCategoria(){
+        return this.categoria;
+    }
+
+    public int getCuposDisponibles() {
+        return cuposDisponibles;
+    }
+
+    public boolean tieneCupoDisponible(){
+        return this.cuposDisponibles > 0;
     }
 
     public void agregarItem(Item item) {
