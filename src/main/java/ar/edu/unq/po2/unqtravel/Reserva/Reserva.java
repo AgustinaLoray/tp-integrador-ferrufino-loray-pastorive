@@ -2,6 +2,7 @@ package ar.edu.unq.po2.unqtravel.Reserva;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Objects;
+import ar.edu.unq.po2.unqtravel.Excepciones.Excepciones;
 
 import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
 import ar.edu.unq.po2.unqtravel.Estados.*;
@@ -14,7 +15,7 @@ public class Reserva {
     private final List<ObserverReserva> observers = new ArrayList<>();
 
     public Reserva() {
-        this.estado = new SolicitudPendiente(this);
+        this.estado = new SolicitudPendiente();
     }
 
     public Estado getEstado() {
@@ -38,11 +39,7 @@ public class Reserva {
     }
 
     public void agregarItemDirecto(Item item) {
-        if (item == null) {
-            throw new IllegalArgumentException("El item no puede ser null");
-        } else {
-            this.items.add(item);
-        }
+        this.items.add(Objects.requireNonNull(item, "El item no puede ser null"));
     }
 
     public void quitarItemDirecto(Item item) {
@@ -58,11 +55,11 @@ public class Reserva {
     }
 
     public void agregarItem(Item item) {
-        this.estado.agregarItem(item);
+        this.estado.agregarItem(this, item);
     }
 
     public void quitarItem(Item item) {
-        this.estado.quitarItem(item);
+        this.estado.quitarItem(this, item);
     }
 
     public void agregarItemPendiente(Item item) {
@@ -79,23 +76,23 @@ public class Reserva {
     }
 
     public void confirmar() {
-        this.estado.confirmar();
+        this.estado.confirmar(this);
     }
 
     public void checkIn() {
-        this.estado.checkIn();
+        this.estado.checkIn(this);
     }
 
     public void iniciarViaje() {
-        this.estado.iniciarViaje();
+        this.estado.iniciarViaje(this);
     }
 
     public void finalizar() {
-        this.estado.finalizar();
+        this.estado.finalizar(this);
     }
 
     public void cancelar() {
-        this.estado.cancelar();
+        this.estado.cancelar(this);
     }
 
     public void bloquearCupoDisponible() {
@@ -110,7 +107,7 @@ public class Reserva {
             for (int i = itemBloqueados.size() - 1; i >= 0; i--) {
                 itemBloqueados.get(i).incrementarCupo();
             }
-            throw new IllegalStateException("No se pudo bloquear el cupo disponible para todos los items. Se han revertido los cambios.", error);
+            throw new Excepciones("No se pudo bloquear el cupo disponible para todos los items. Se han revertido los cambios.");
         }
     }
 
@@ -126,7 +123,7 @@ public class Reserva {
             for (int i = itemLiberados.size() - 1; i >= 0; i--) {
                 itemLiberados.get(i).decrementarCupo();
             }
-            throw new IllegalStateException("No se pudo liberar el cupo para todos los items. Se han revertido los cambios.", error);
+            throw new Excepciones("No se pudo liberar el cupo para todos los items. Se han revertido los cambios.");
         }
     }
 
@@ -150,9 +147,5 @@ public class Reserva {
     public int getCantidadPasajeros() {
     	return 0;
     }
-    
-    
-    
-    
 
 }

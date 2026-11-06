@@ -42,7 +42,7 @@ public class DTClubTest {
 
     @Test 
     public void notificarAlClub() { //estado cancelada asi que si deberia notificar al club
-        this.reserva.cambiarEstado(new Cancelada(reserva));
+        this.reserva.cambiarEstado(new Cancelada());
         dtClub.notificar(reserva);
         String textoImpreso = salidaCapturada.toString().trim();
         assertEquals("Cupon de descuento del 5% enviado al cliente por cancelacion", textoImpreso);
@@ -50,7 +50,7 @@ public class DTClubTest {
 
     @Test
     public void estadoConfirmada() { //estado confirmada asi que no deberia notificar al club
-        reserva.cambiarEstado(new Confirmada(reserva));
+        reserva.cambiarEstado(new Confirmada());
         dtClub.notificar(reserva);
         assertTrue(salidaCapturada.toString().isEmpty());
     }

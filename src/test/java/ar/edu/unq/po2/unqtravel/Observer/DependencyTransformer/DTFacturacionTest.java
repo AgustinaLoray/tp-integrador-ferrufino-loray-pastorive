@@ -44,7 +44,7 @@ public class DTFacturacionTest {
 
     @Test 
     public void notificarFacturacionEnEstadoFinalizada() { // debe notificar al finalizar
-        reserva.cambiarEstado(new Finalizada(reserva));
+        reserva.cambiarEstado(new Finalizada());
         
         dtFacturacion.notificar(reserva);
         
@@ -54,7 +54,7 @@ public class DTFacturacionTest {
 
     @Test
     public void noNotificarFacturacionEnEstadoConfirmada() { // no debe notificar
-        reserva.cambiarEstado(new Confirmada(reserva));
+        reserva.cambiarEstado(new Confirmada());
         
         dtFacturacion.notificar(reserva);
         
@@ -63,7 +63,7 @@ public class DTFacturacionTest {
 
     @Test
     public void noNotificarFacturacionEnEstadoEnCurso() { // no debe notificar
-        reserva.cambiarEstado(new EnCurso(reserva));
+        reserva.cambiarEstado(new EnCurso());
         
         dtFacturacion.notificar(reserva);
         
