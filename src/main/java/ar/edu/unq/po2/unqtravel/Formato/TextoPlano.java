@@ -4,7 +4,15 @@ public class TextoPlano implements Formato {
 
 	@Override
 	public String visitarSMR(ServiciosMasReservados s) {
-		// TODO Auto-generated method stub
+		String resultado = "--- REPORTE DE SERVICIOS MAS RESERVADOS ---\n";
+	    
+	    for (ItemRanking item : s.getRankingServicios()) {
+	        resultado = resultado + "- " + item.getNombreServicio() 
+	                    + " | Cantidad: " + item.getCantidadVendida() 
+	                    + " | Promedio: $" + item.getPrecioPromedio() + "\n";
+	    }
+	    
+	    return resultado;
 		
 	}
 

@@ -1,5 +1,6 @@
 package ar.edu.unq.po2.unqtravel.Reserva;
 import java.util.List;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -12,9 +13,13 @@ public class Reserva {
     private double montoReembolso;
     private final List<Item> items = new ArrayList<>();
     private final List<ObserverReserva> observers = new ArrayList<>();
+    private LocalDate fechaInicio;
+    private LocalDate fechaFin;
 
-    public Reserva() {
+    public Reserva(LocalDate fechaInicio, LocalDate fechaFin) {
         this.estado = new SolicitudPendiente(this);
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
     }
 
     public Estado getEstado() {
@@ -150,6 +155,22 @@ public class Reserva {
     public int getCantidadPasajeros() {
     	return 0;
     }
+    
+    //Metodos para la parte de formato
+    
+    public double getCostoItem() {
+    	return 0.0; 
+    }
+    
+    public LocalDate getFechaInicio() {
+    	return fechaInicio;
+    }
+    
+    public LocalDate getFechaFin() {
+    	return fechaFin;
+    }
+    
+    
     
     
     

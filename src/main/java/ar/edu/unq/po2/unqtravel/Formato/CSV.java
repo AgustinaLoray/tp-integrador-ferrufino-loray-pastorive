@@ -4,9 +4,17 @@ public class CSV implements Formato{
 
 	@Override
 	public String visitarSMR(ServiciosMasReservados s) {
-		// TODO Auto-generated method stub
-		
+	    String resultado = "Servicio,Cantidad Vendida,Precio Promedio\n";
+	    
+	    for (ItemRanking item : s.getRankingServicios()) {
+	        resultado = resultado + item.getNombreServicio() + "," 
+	                    + item.getCantidadVendida() + "," 
+	                    + item.getPrecioPromedio() + "\n";
+	    }
+	    
+	    return resultado; 
 	}
+	
 
 	@Override
 	public String visitarCupoDisponible(CupoDisponible c) {

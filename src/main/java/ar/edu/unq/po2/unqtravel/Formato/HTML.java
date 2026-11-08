@@ -4,7 +4,20 @@ public class HTML implements Formato {
 
 	@Override
 	public String visitarSMR(ServiciosMasReservados s) {
-		// TODO Auto-generated method stub
+	    String resultado = "<h1>Servicios Más Reservados</h1>" +
+	                       "<ul>";
+	    
+	    for (ItemRanking item : s.getRankingServicios()) {
+	        resultado = resultado + "<li>" 
+	                    + item.getNombreServicio() + " - " 
+	                    + item.getCantidadVendida() + " unidades - $" 
+	                    + item.getPrecioPromedio() 
+	                    + "</li>";
+	    }
+	    
+	    resultado = resultado + "</ul>";
+	    
+	    return resultado;
 		
 	}
 
