@@ -18,14 +18,30 @@ public class CSV implements Formato{
 
 	@Override
 	public String visitarCupoDisponible(CupoDisponible c) {
-		// TODO Auto-generated method stub
+		String resultado = "Categoria,Cupos Totales,Cupos Reservados,Cupos Libres\n";
+	    
+	    for (ItemCupo item : c.getListaCupos()) {
+	        resultado = resultado + item.getCategoria() + ","
+	                    + item.getCuposTotales() + ","
+	                    + item.getCuposReservados() + ","
+	                    + item.getCuposLibres() + "\n";
+	    }
+	    
+	    return resultado;
 		
 	}
 
 	@Override
 	public String visitarEPP(ExposicionPorProveedor e) {
-		// TODO Auto-generated method stub
-		
+	    String resultado = "Operador,Cantidad de Items,Porcentaje\n";
+	    
+	    for (ItemExposicion item : e.getExposiciones()) {
+	        resultado = resultado + item.getOperador() + ","
+	                    + item.getCantidadItems() + ","
+	                    + item.getPorcentaje() + "%\n";
+	    }
+	    
+	    return resultado;
 	}
 
 }

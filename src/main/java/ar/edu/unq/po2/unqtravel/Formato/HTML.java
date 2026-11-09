@@ -23,14 +23,39 @@ public class HTML implements Formato {
 
 	@Override
 	public String visitarCupoDisponible(CupoDisponible c) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public String visitarEPP(ExposicionPorProveedor e) {
-		// TODO Auto-generated method stub
-		
+	    String resultado = "<h1>Reporte de Ocupación y Cupos</h1>" +
+	                       "<ul>";
+	    
+	    for (ItemCupo item : c.getListaCupos()) {
+	        resultado = resultado + "<li>" 
+	                    + item.getCategoria() + " | " 
+	                    + "Totales: " + item.getCuposTotales() + " | "
+	                    + "Reservados: " + item.getCuposReservados() + " | "
+	                    + "Libres: " + item.getCuposLibres() 
+	                    + "</li>";
+	    }
+	    
+	    resultado = resultado + "</ul>";
+	    return resultado;
 	}
 	
+		
+	
+
+	@Override
+	public String visitarEPP(ExposicionPorProveedor e)  {
+	    String resultado = "<h1>Reporte de Exposición por Proveedor</h1>" +
+	                       "<ul>";
+	    
+	    for (ItemExposicion item : e.getExposiciones()) {
+	        resultado = resultado + "<li>" 
+	                    + item.getOperador() + " | " 
+	                    + "Cantidad: " + item.getCantidadItems() + " | "
+	                    + "Porcentaje: " + item.getPorcentaje() + "%"
+	                    + "</li>";
+	    }
+	    
+	    resultado = resultado + "</ul>";
+	    return resultado;
+	}
 }

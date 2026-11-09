@@ -17,6 +17,7 @@ public class ServicioIndividual implements Item {
     private int cupoMaximo;
     private int cuposDisponibles;
     private List<ValorAtributo> atributos;
+    private String operador;
 
     public ServicioIndividual(int id, String nombre, int cupoMaximo, String proveedor, String categoria, String descripcion, Double precioBase, Double descuento) {
         if (cupoMaximo < 0) {
@@ -63,17 +64,11 @@ public class ServicioIndividual implements Item {
         return proveedor;
     }
 
-    public String getCategoria() {
-        return categoria;
-    }
-
+   
     public int getCupoMaximo() {
         return cupoMaximo;
     }
 
-    public int getCuposDisponibles() {
-        return cuposDisponibles;
-    }
 
     public List<ValorAtributo> getAtributos() {
         return List.copyOf(this.atributos);
@@ -115,4 +110,21 @@ public class ServicioIndividual implements Item {
         }
         this.cuposDisponibles++;
     }
+    
+    
+    // Metodos para formato
+    
+    public String getOperador() {
+    	return operador;
+    }
+    
+    public String getCategoria() {
+        return categoria;
+    }
+    
+    public int getCupos() {
+        return cuposDisponibles;
+    }
+
+    
 }

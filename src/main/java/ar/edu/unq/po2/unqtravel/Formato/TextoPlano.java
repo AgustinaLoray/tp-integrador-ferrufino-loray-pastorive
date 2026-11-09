@@ -18,14 +18,29 @@ public class TextoPlano implements Formato {
 
 	@Override
 	public String visitarCupoDisponible(CupoDisponible c) {
-		// TODO Auto-generated method stub
-		
+	    String resultado = "--- REPORTE DE OCUPACION Y CUPOS DISPONIBLES ---\n";
+	    
+	    for (ItemCupo item : c.getListaCupos()) {
+	        resultado = resultado + "- " + item.getCategoria() 
+	                    + " | Totales: " + item.getCuposTotales() 
+	                    + " | Reservados: " + item.getCuposReservados() 
+	                    + " | Libres: " + item.getCuposLibres() + "\n";
+	    }
+	    
+	    return resultado;
 	}
 
 	@Override
 	public String visitarEPP(ExposicionPorProveedor e) {
-		// TODO Auto-generated method stub
-		
+	    String resultado = "--- REPORTE DE EXPOSICION POR PROVEEDOR ---\n";
+	    
+	    for (ItemExposicion item : e.getExposiciones()) {
+	        resultado = resultado + "- " + item.getOperador() 
+	                    + " | Cantidad: " + item.getCantidadItems() 
+	                    + " | Porcentaje: " + item.getPorcentaje() + "%\n";
+	    }
+	    
+	    return resultado;
 	}
 	
 }

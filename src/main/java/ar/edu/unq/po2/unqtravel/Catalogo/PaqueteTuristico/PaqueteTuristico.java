@@ -10,12 +10,17 @@ public class PaqueteTuristico implements Item {
     private String descripcion;
     private Double descuento;
     private List<Item> items;
+    private String categoria;
+    private int cupos;
+    private String operador;
 
-    public PaqueteTuristico(String n, String des, Double d) {
+    public PaqueteTuristico(String n, String des, Double d, String categoria, int cupos) {
         this.nombre = n;
         this.descripcion = des;
         this.descuento = validarDescuento(d);
         this.items = new ArrayList<>();
+        this.categoria = categoria;
+        this.cupos = cupos;
     }
 
     public void agregarItem(Item item) {
@@ -98,5 +103,19 @@ public class PaqueteTuristico implements Item {
             throw new IllegalArgumentException("El descuento debe estar entre 0 y 1");
         }
         return descuentoValidado;
+    }
+    
+    // metodos para formatos
+    
+    public int getCupos() {
+    	return cupos;
+    }
+    
+    public String getCategoria() {
+    	return categoria;
+    }
+    
+    public String getOperador() {
+    	return operador;
     }
 }
