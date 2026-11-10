@@ -7,6 +7,8 @@ public interface Item {
     double getPrecioFinal();
     void decrementarCupo();
     void incrementarCupo();
+    int getCupos();
+    String getOperador();
     String getCategoria();
     boolean tieneCupoDisponible();
 }
