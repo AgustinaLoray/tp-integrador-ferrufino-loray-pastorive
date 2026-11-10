@@ -2,15 +2,21 @@ package ar.edu.unq.po2.unqtravel.Catalogo.Catalogo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
-import ar.edu.unq.po2.unqtravel.Catalogo.Catalogo.CriterioBusqueda;
-
 
 public class Catalogo {
 
-    private List<Item> items = new ArrayList<>();
-    private CriterioBusqueda criterio;
+    private List<Item> items;
+
+    public Catalogo(List<Item> lista) {
+        this.items = lista;
+    }
+
+    public Catalogo() { 
+        this.items = new ArrayList<>();
+    }
 
     public List<Item> getItems() {
         return List.copyOf(this.items);
@@ -21,7 +27,8 @@ public class Catalogo {
     }
 
     public List<Item> buscar(CriterioBusqueda criterio) {
-        // return items.stream().filter(criterio :: esSatisfechoPor())
+        Stream<Item>  itemsFiltrados =  this.items.stream().filter(item -> criterio.esSatisfechoPor(item));
+        return itemsFiltrados.toList();
     }
 
 }

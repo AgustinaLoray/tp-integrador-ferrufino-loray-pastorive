@@ -1,18 +1,12 @@
 package ar.edu.unq.po2.unqtravel.Estados;
 
 import ar.edu.unq.po2.unqtravel.Reserva.Reserva;
-
 import java.util.Objects;
-
 import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
+import ar.edu.unq.po2.unqtravel.Excepciones.Excepciones;
 
 public abstract class Estado {
-    protected Reserva reserva;
-
-    public Estado(Reserva reserva) {
-        this.reserva = Objects.requireNonNull(reserva, "La reserva no puede ser null");
-    }
-
+    
     public boolean debeNotificarEmail() {
         return false;
     }
@@ -25,31 +19,31 @@ public abstract class Estado {
         return false;
     }
 
-    public void agregarItem(Item item) {
-        throw new UnsupportedOperationException("No se puede agregar items");
+    public void agregarItem(Reserva reserva, Item item) {
+        throw new Excepciones("No se puede agregar items");
     }
 
-    public void quitarItem(Item item) {
-        throw new UnsupportedOperationException("No se puede quitar items");
+    public void quitarItem(Reserva reserva, Item item) {
+        throw new Excepciones("No se puede quitar items");
     }
 
-    public void confirmar() {
-        throw new UnsupportedOperationException("No se puede confirmar la reserva en el estado actual.");
+    public void confirmar(Reserva reserva) {
+        throw new Excepciones("No se puede confirmar la reserva en el estado actual.");
     }
 
-    public void checkIn() {
-        throw new UnsupportedOperationException("No se puede realizar el check-in en el estado actual.");
+    public void checkIn(Reserva reserva) {
+        throw new Excepciones("No se puede realizar el check-in en el estado actual.");
     }
 
-    public void iniciarViaje() {
-        throw new UnsupportedOperationException("No se puede iniciar el viaje en el estado actual.");
+    public void iniciarViaje(Reserva reserva) {
+        throw new Excepciones("No se puede iniciar el viaje en el estado actual.");
     }
 
-    public void finalizar() {
-        throw new UnsupportedOperationException("No se puede finalizar la reserva en el estado actual.");
+    public void finalizar(Reserva reserva) {
+        throw new Excepciones("No se puede finalizar la reserva en el estado actual.");
     }
 
-    public void cancelar() {
-        throw new UnsupportedOperationException("No se puede cancelar la reserva en el estado actual.");
+    public void cancelar(Reserva reserva) {
+        throw new Excepciones("No se puede cancelar la reserva en el estado actual.");
     }
 }

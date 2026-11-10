@@ -70,6 +70,10 @@ public class ServicioIndividual implements Item {
     }
 
 
+    public boolean tieneCupoDisponible(){
+        return this.cuposDisponibles > 0;
+    }
+
     public List<ValorAtributo> getAtributos() {
         return List.copyOf(this.atributos);
     }

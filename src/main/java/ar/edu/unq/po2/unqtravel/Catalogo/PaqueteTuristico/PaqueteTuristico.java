@@ -23,6 +23,10 @@ public class PaqueteTuristico implements Item {
         this.cupos = cupos;
     }
 
+    public boolean tieneCupoDisponible(){
+        return this.cupos > 0;
+    }
+
     public void agregarItem(Item item) {
         this.items.add(Objects.requireNonNull(item, "El item no puede ser null"));
     }

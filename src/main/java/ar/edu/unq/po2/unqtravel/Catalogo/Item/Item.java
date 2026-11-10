@@ -9,4 +9,6 @@ public interface Item {
     void incrementarCupo();
     int getCupos();
     String getOperador();
+    String getCategoria();
+    boolean tieneCupoDisponible();
 }

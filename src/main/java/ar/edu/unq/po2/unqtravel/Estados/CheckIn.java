@@ -3,20 +3,16 @@ import ar.edu.unq.po2.unqtravel.Reserva.Reserva;
 
 public class CheckIn extends Estado {
 
-    public CheckIn(Reserva reserva) {
-        super(reserva);
+    @Override
+    public void iniciarViaje(Reserva reserva) {
+        reserva.cambiarEstado(new EnCurso());
     }
 
     @Override
-    public void iniciarViaje() {
-        reserva.cambiarEstado(new EnCurso(reserva));
-    }
-
-    @Override
-    public void cancelar() {
+    public void cancelar(Reserva reserva) {
         reserva.liberarCupos();
-        double reembolso = this.reserva.getCostoServicios() + this.reserva.getCostoTasas();
-        this.reserva.generarVoucherDeReembolso(reembolso); 
-        reserva.cambiarEstado(new Cancelada(reserva));
+        double reembolso = reserva.getCostoServicios() + reserva.getCostoTasas();
+        reserva.generarVoucherDeReembolso(reembolso);
+        reserva.cambiarEstado(new Cancelada());
     }
 }

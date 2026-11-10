@@ -11,6 +11,6 @@ public class CriterioPrecioMaximo implements CriterioBusqueda{
 
     @Override
     public boolean esSatisfechoPor(Item item) {
-        return item.getPrecioBase() <= this.precioMaximo;
+        return item.getPrecioFinal() <= this.precioMaximo;
     }
 }

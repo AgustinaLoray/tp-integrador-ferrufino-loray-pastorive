@@ -50,7 +50,7 @@ public class DTEmailTest {
 
     @Test 
     public void notificarEmailEnEstadoConfirmada() { //debe notificar porque pasa a estado confirmada
-        reserva.cambiarEstado(new Confirmada(reserva));
+        reserva.cambiarEstado(new Confirmada());
         
         dtEmail.notificar(reserva);
         
@@ -60,7 +60,7 @@ public class DTEmailTest {
 
     @Test 
     public void notificarEmailEnEstadoEnCurso() { //debe notificar porque pasa a estado en curso
-        reserva.cambiarEstado(new EnCurso(reserva));
+        reserva.cambiarEstado(new EnCurso());
         
         dtEmail.notificar(reserva);
         
@@ -70,7 +70,7 @@ public class DTEmailTest {
 
     @Test 
     public void notificarEmailEnEstadoFinalizada() { //debe notificar porque pasa a estado finalizada
-        reserva.cambiarEstado(new Finalizada(reserva));
+        reserva.cambiarEstado(new Finalizada());
         
         dtEmail.notificar(reserva);
         
@@ -80,7 +80,7 @@ public class DTEmailTest {
 
     @Test
     public void noNotificarEmailEnEstadoCancelada() { //no debe notificar
-        reserva.cambiarEstado(new Cancelada(reserva));
+        reserva.cambiarEstado(new Cancelada());
         
         dtEmail.notificar(reserva);
         
