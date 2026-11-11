@@ -1,10 +1,18 @@
 package ar.edu.unq.po2.unqtravel.Formato;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import ar.edu.unq.po2.unqtravel.Catalogo.Catalogo.Catalogo;
 import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
+import ar.edu.unq.po2.unqtravel.Catalogo.PaqueteTuristico.PaqueteTuristico;
+import ar.edu.unq.po2.unqtravel.Estados.Cancelada;
+import ar.edu.unq.po2.unqtravel.Reserva.DetalleReserva;
 import ar.edu.unq.po2.unqtravel.Reserva.Reserva;
 
 public class SistemaDeReporte {
@@ -65,17 +73,89 @@ public class SistemaDeReporte {
         return cupoDisponible.aceptar(formato);
     }
     
-    private int calcularReservados(Item item, List<Reserva> reservas) {
-        return (int) reservas.stream()
-                             .filter(r -> r.getItems().contains(item))
-                             .count();
-    }
-    
     private List<ItemCupo> armarFilasCupos(List<Reserva> reservasDelPeriodo) {
-        return catalogo.getItems().stream()
-        		.map(item -> new ItemCupo(item.getNombre(),
-                item.getCupos(), this.calcularReservados(item, reservasDelPeriodo)))
-        		.toList();
+        Map<String, Integer> totalesPorCategoria = new LinkedHashMap<>();
+        Map<String, Integer> reservadosPorCategoria = new LinkedHashMap<>();
+        Set<Item> inventarioContado = Collections.newSetFromMap(new IdentityHashMap<>());
+
+        for (Item item : catalogo.getItems()) {
+            acumularTotales(item, totalesPorCategoria, inventarioContado, crearConjuntoPorIdentidad());
+        }
+
+        for (Reserva reserva : reservasDelPeriodo) {
+            if (!reserva.tienePagoConfirmado()
+                    || reserva.getEstado() instanceof Cancelada) {
+                continue;
+            }
+
+            for (DetalleReserva detalle : reserva.getDetallesReserva()) {
+                acumularReservados(
+                        detalle.getItem(),
+                        detalle.getCantidad(),
+                        reservadosPorCategoria,
+                        crearConjuntoPorIdentidad());
+            }
+        }
+
+        return totalesPorCategoria.entrySet().stream()
+                .map(entrada -> new ItemCupo(
+                        entrada.getKey(),
+                        entrada.getValue(),
+                        reservadosPorCategoria.getOrDefault(entrada.getKey(), 0)))
+                .toList();
+    }
+
+    private void acumularTotales(
+            Item item,
+            Map<String, Integer> totalesPorCategoria,
+            Set<Item> inventarioContado,
+            Set<Item> paquetesEnRecorrido) {
+        if (item instanceof PaqueteTuristico paquete) {
+            if (!paquetesEnRecorrido.add(paquete)) {
+                throw new IllegalArgumentException("La composición de paquetes contiene un ciclo.");
+            }
+            try {
+                for (Item componente : paquete.getItems()) {
+                    acumularTotales(componente, totalesPorCategoria, inventarioContado, paquetesEnRecorrido);
+                }
+            } finally {
+                paquetesEnRecorrido.remove(paquete);
+            }
+            return;
+        }
+
+        if (inventarioContado.add(item)) {
+            totalesPorCategoria.merge(item.getCategoria(), item.getCuposTotales(), Integer::sum);
+        }
+    }
+
+    private void acumularReservados(
+            Item item,
+            int cantidad,
+            Map<String, Integer> reservadosPorCategoria,
+            Set<Item> paquetesEnRecorrido) {
+        if (item instanceof PaqueteTuristico paquete) {
+            if (!paquetesEnRecorrido.add(paquete)) {
+                throw new IllegalArgumentException("La composición de paquetes contiene un ciclo.");
+            }
+            try {
+                for (Item componente : paquete.getItems()) {
+                    acumularReservados(componente, cantidad, reservadosPorCategoria, paquetesEnRecorrido);
+                }
+            } finally {
+                paquetesEnRecorrido.remove(paquete);
+            }
+            return;
+        }
+
+        reservadosPorCategoria.merge(
+                item.getCategoria(),
+                cantidad,
+                Integer::sum);
+    }
+
+    private Set<Item> crearConjuntoPorIdentidad() {
+        return Collections.newSetFromMap(new IdentityHashMap<>());
     }
     
     // Seccion de exposicion por proveedor

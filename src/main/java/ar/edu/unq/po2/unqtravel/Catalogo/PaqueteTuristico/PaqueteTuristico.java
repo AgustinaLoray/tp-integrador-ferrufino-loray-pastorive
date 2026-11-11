@@ -12,15 +12,25 @@ public class PaqueteTuristico implements Item {
     private List<Item> items;
     private String categoria;
     private int cupos;
+    private int cuposTotales;
     private String operador;
 
-    public PaqueteTuristico(String n, String des, Double d, String categoria, int cupos) {
+    public PaqueteTuristico(String n, String des, Double d, String categoria, int cuposTotales) {
         this.nombre = n;
         this.descripcion = des;
         this.descuento = validarDescuento(d);
         this.items = new ArrayList<>();
         this.categoria = categoria;
-        this.cupos = cupos;
+        this.cupos = cuposTotales;
+        this.cuposTotales = cuposTotales;
+    }
+
+    public int getCuposDisponibles() {
+        return cupos;
+    }
+
+    public int getCuposTotales() {
+        return cuposTotales;
     }
 
     public boolean tieneCupoDisponible(){
@@ -41,11 +51,13 @@ public class PaqueteTuristico implements Item {
         try {
             for (Item item : this.items) {
                 item.decrementarCupo();
+                this.cupos--;
                 reservados.add(item);
             }
         } catch (RuntimeException error) {
             for (int i = reservados.size() - 1; i >= 0; i--) {
                 reservados.get(i).incrementarCupo();
+                this.cupos++;
             }
             throw error;
         }

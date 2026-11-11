@@ -116,7 +116,12 @@ class PaqueteTuristicoTest {
         }
 
         @Override
-        public int getCupos() {
+        public int getCuposTotales() {
+            return 0;
+        }
+
+        @Override
+        public int getCuposDisponibles() {
             return 0;
         }
 

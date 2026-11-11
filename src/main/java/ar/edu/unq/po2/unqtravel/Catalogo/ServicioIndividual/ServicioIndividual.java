@@ -48,6 +48,14 @@ public class ServicioIndividual implements Item {
         this.atributos = new ArrayList<>();
     }
 
+    public int getCuposDisponibles() {
+        return cuposDisponibles;
+    }
+    
+    public int getCuposTotales() {
+        return cupoMaximo;
+    }
+
     public void agregarAtributo(ValorAtributo atributo) {
         this.atributos.add(Objects.requireNonNull(atributo, "Se debe ingresar un atributo"));
     }
@@ -64,11 +72,9 @@ public class ServicioIndividual implements Item {
         return proveedor;
     }
 
-   
     public int getCupoMaximo() {
         return cupoMaximo;
     }
-
 
     public boolean tieneCupoDisponible(){
         return this.cuposDisponibles > 0;
