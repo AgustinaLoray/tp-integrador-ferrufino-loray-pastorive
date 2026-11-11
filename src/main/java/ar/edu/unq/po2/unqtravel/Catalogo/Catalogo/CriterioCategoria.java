@@ -11,6 +11,6 @@ public class CriterioCategoria implements CriterioBusqueda {
 
     @Override 
     public boolean esSatisfechoPor(Item item){
-        return item.getCategoria().toLowerCase().contains(this.categoria);
+        return item.getCategoria().equalsIgnoreCase(this.categoria);
     }
 }

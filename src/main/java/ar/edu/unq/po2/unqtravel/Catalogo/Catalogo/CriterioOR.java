@@ -1,15 +1,13 @@
 package ar.edu.unq.po2.unqtravel.Catalogo.Catalogo;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
 
 public class CriterioOR extends CriterioCompuesto {
-    
-    private List<CriterioBusqueda> criterios;
 
     public CriterioOR() {
+        super();
         this.criterios = new ArrayList<>();
     }
 

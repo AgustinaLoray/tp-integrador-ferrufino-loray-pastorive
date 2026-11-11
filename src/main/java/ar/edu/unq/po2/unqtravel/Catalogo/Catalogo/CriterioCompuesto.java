@@ -6,7 +6,7 @@ import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
 
 public abstract class CriterioCompuesto {
     
-    private List<CriterioBusqueda> criterios;
+    protected List<CriterioBusqueda> criterios;
 
     public void borrarCriterio(CriterioBusqueda c) {
         this.criterios.remove(c);

@@ -18,7 +18,7 @@ public class Reserva {
     private LocalDate fechaFin;
 
     public Reserva(LocalDate fechaInicio, LocalDate fechaFin) {
-        this.estado = new SolicitudPendiente(this);
+        this.estado = new SolicitudPendiente();
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
     }

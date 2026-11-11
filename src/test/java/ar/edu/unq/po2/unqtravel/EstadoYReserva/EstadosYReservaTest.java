@@ -1,12 +1,16 @@
 package ar.edu.unq.po2.unqtravel.EstadoYReserva;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.time.LocalDate;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import ar.edu.unq.po2.unqtravel.Estados.*;
 import ar.edu.unq.po2.unqtravel.Catalogo.PaqueteTuristico.PaqueteTuristico;
 import ar.edu.unq.po2.unqtravel.Catalogo.ServicioIndividual.ServicioIndividual;
+import ar.edu.unq.po2.unqtravel.Excepciones.Excepciones;
 import ar.edu.unq.po2.unqtravel.Reserva.Reserva;
 
 public class EstadosYReservaTest {
@@ -16,12 +20,12 @@ public class EstadosYReservaTest {
 
     @BeforeEach
     public void setUp() {
-        reserva = new Reserva(); // se inicializa en solicitud pendiente
+        reserva = new Reserva(LocalDate.now(), LocalDate.now().plusDays(7)); // se inicializa en solicitud pendiente
 
         vuelo = new PaqueteTuristico (
             "Vuelo Buenos Aires - Mendoza", 
             "Aerolineas Argentinas", 
-            0.0
+            0.0, null, 0
         );
 
        hotel = new ServicioIndividual(
@@ -71,7 +75,7 @@ public class EstadosYReservaTest {
         assertInstanceOf(SolicitudPendiente.class, reserva.getEstado());
         reserva.agregarItem(hotel);
         reserva.confirmar();
-        assertEquals(19, hotel.getCuposDisponibles());
+        assertEquals(19, hotel.getCupos());
     }
 
     @Test 
@@ -80,7 +84,7 @@ public class EstadosYReservaTest {
         reserva.agregarItem(hotel);
         reserva.confirmar();
         reserva.cancelar();
-        assertEquals(20, hotel.getCuposDisponibles());
+        assertEquals(20, hotel.getCupos());
     }
 
     @Test 
@@ -90,21 +94,21 @@ public class EstadosYReservaTest {
         reserva.checkIn();
         reserva.cancelar();
         assertInstanceOf(Cancelada.class, reserva.getEstado());
-        assertEquals(20, hotel.getCuposDisponibles());
+        assertEquals(20, hotel.getCupos());
         assertEquals(150000.0, reserva.getReembolso());
     }
 
     @Test
     public void rechazaTransicionesNoPermitidas() {
-        assertThrows(UnsupportedOperationException.class, () -> reserva.checkIn());
+        assertThrows(Excepciones.class, () -> reserva.checkIn());
 
         reserva.confirmar();
-        assertThrows(UnsupportedOperationException.class, () -> reserva.confirmar());
+        assertThrows(Excepciones.class, () -> reserva.confirmar());
 
         reserva.checkIn();
         reserva.iniciarViaje();
         reserva.finalizar();
-        assertThrows(UnsupportedOperationException.class, () -> reserva.cancelar());
+        assertThrows(Excepciones.class, () -> reserva.cancelar());
     }
 
     @Test
@@ -124,8 +128,8 @@ public class EstadosYReservaTest {
         IllegalStateException error = assertThrows(IllegalStateException.class, reserva::confirmar);
 
         assertInstanceOf(IllegalStateException.class, error.getCause());
-        assertEquals(20, hotel.getCuposDisponibles());
-        assertEquals(0, sinCupo.getCuposDisponibles());
+        assertEquals(20, hotel.getCupos());
+        assertEquals(0, sinCupo.getCupos());
         assertInstanceOf(SolicitudPendiente.class, reserva.getEstado());
     }
 }
