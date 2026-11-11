@@ -117,6 +117,19 @@ public class EstadosYReservaTest {
     }
 
     @Test
+    public void cancelarDuranteElViajeLiberaCupoYReembolsaLosServicios() {
+        reserva.agregarItem(hotel);
+        confirmarReserva();
+        reserva.cambiarEstado(new EnCurso());
+
+        reserva.cancelar();
+
+        assertInstanceOf(Cancelada.class, reserva.getEstado());
+        assertEquals(20, hotel.getCupos());
+        assertEquals(150000.0, reserva.getReembolso());
+    }
+
+    @Test
     public void rechazaTransicionesNoPermitidas() {
         assertThrows(Excepciones.class, () -> reserva.checkIn());
 

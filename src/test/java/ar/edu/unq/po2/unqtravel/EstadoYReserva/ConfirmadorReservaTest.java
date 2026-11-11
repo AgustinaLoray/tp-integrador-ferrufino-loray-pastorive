@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
@@ -79,6 +80,59 @@ class ConfirmadorReservaTest {
         assertEquals(100.0, reserva.getCostoItem(item));
         org.mockito.Mockito.verify(item).decrementarCupo();
         org.mockito.Mockito.verify(item, org.mockito.Mockito.never()).incrementarCupo();
+    }
+
+    @Test
+    void conservaElErrorDeNotificacionYAgregaElErrorDelObserverComoSuprimido() {
+        Item item = mock(Item.class);
+        when(item.getPrecioFinal()).thenReturn(100.0);
+        Reserva reserva = nuevaReserva();
+        reserva.agregarItem(item);
+        reserva.agregarObserver(r -> {
+            throw new IllegalStateException("Observer fallido");
+        });
+        MetodoDePago pagoConNotificacionFallida = new PagoDePrueba() {
+            @Override
+            protected void notificarResultado() {
+                throw new IllegalStateException("No se pudo notificar el pago");
+            }
+        };
+
+        NotificacionPagoException error = assertThrows(NotificacionPagoException.class,
+                () -> new ConfirmadorReserva().confirmar(reserva, pagoConNotificacionFallida));
+
+        assertEquals(1, error.getSuppressed().length);
+        assertInstanceOf(Confirmada.class, reserva.getEstado());
+    }
+
+    @Test
+    void agregaComoSuprimidoElErrorAlLiberarCuposDespuesDeUnPagoFallido() {
+        Item item = mock(Item.class);
+        when(item.getPrecioFinal()).thenReturn(100.0);
+        doThrow(new IllegalStateException("No se pudo liberar"))
+                .when(item).incrementarCupo();
+        Reserva reserva = nuevaReserva();
+        reserva.agregarItem(item);
+        MetodoDePago pagoFallido = new PagoDePrueba() {
+            @Override
+            protected void ejecutarTransaccion(double monto) {
+                throw new IllegalArgumentException("Pago rechazado");
+            }
+        };
+
+        IllegalArgumentException error = assertThrows(IllegalArgumentException.class,
+                () -> new ConfirmadorReserva().confirmar(reserva, pagoFallido));
+
+        assertEquals("Pago rechazado", error.getMessage());
+        assertEquals(1, error.getSuppressed().length);
+        org.mockito.Mockito.verify(item).decrementarCupo();
+    }
+
+    @Test
+    void rechazaArgumentosNulosDelConfirmador() {
+        ConfirmadorReserva confirmador = new ConfirmadorReserva();
+        assertThrows(NullPointerException.class, () -> confirmador.confirmar(null, new PagoDePrueba()));
+        assertThrows(NullPointerException.class, () -> confirmador.confirmar(nuevaReserva(), null));
     }
 
     private Reserva nuevaReserva() {

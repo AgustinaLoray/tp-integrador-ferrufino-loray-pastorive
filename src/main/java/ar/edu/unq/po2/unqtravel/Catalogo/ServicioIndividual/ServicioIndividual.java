@@ -17,7 +17,6 @@ public class ServicioIndividual implements Item {
     private int cupoMaximo;
     private int cuposDisponibles;
     private List<ValorAtributo> atributos;
-    private String operador;
 
     public ServicioIndividual(int id, String nombre, int cupoMaximo, String proveedor, String categoria, String descripcion, Double precioBase, Double descuento) {
         if (cupoMaximo < 0) {
@@ -125,7 +124,7 @@ public class ServicioIndividual implements Item {
     // Metodos para formato
     
     public String getOperador() {
-    	return operador;
+        return proveedor;
     }
     
     public String getCategoria() {

@@ -36,7 +36,7 @@ public class TextoPlano implements Formato {
 	    
 	    for (ItemExposicion item : e.getExposiciones()) {
 	        resultado = resultado + "- " + item.getOperador() 
-	                    + " | Cantidad: " + item.getCantidadItems() 
+	                    + " | Items equivalentes: " + item.getCantidadItemsEquivalentes()
 	                    + " | Porcentaje: " + item.getPorcentaje() + "%\n";
 	    }
 	    

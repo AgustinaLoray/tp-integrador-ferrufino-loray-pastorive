@@ -2,8 +2,10 @@ package ar.edu.unq.po2.unqtravel.Formato;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,37 +31,43 @@ public class SistemaDeReporte {
 
     public String generarReporteServiciosMasReservados(LocalDate inicio, LocalDate fin, Formato formato) {
         List<Reserva> reservasDelPeriodo = gestorDeReservas.obtenerReservasEnPeriodo(inicio, fin);
+        // Solo cuentan ventas efectivamente pagadas que no fueron canceladas.
+        List<Reserva> reservasValidas = reservasDelPeriodo.stream()
+                .filter(Reserva::tienePagoConfirmado)
+                .filter(reserva -> !(reserva.getEstado() instanceof Cancelada))
+                .toList();
         List<ItemRanking> listaDeFilas = new ArrayList<>();
         
-        for (Item s : catalogo.getItems()) {
-            int cantidad = this.calcularCantidad(s, reservasDelPeriodo);
-            double promedio = this.calcularPrecioPromedio(s, reservasDelPeriodo);
-            
-            listaDeFilas.add(new ItemRanking(s.getNombre(), cantidad, promedio));
+        for (Item item : catalogo.getItems()) {
+            listaDeFilas.add(armarFilaRanking(item, reservasValidas));
         }
-        
+
+        listaDeFilas.sort(Comparator.comparingInt(ItemRanking::getCantidadVendida)
+                .reversed()
+                .thenComparing(ItemRanking::getNombreServicio));
+
         ServiciosMasReservados serviciosMasReservados = new ServiciosMasReservados(listaDeFilas, inicio, fin);
         return serviciosMasReservados.aceptar(formato);
     }
     
-    private List<Reserva> reservasConItem(Item item, List<Reserva> reservas) {
-        return reservas.stream()
-                       .filter(Reserva::tienePagoConfirmado)
-                       .filter(r -> r.getItems().contains(item))
-                       .toList();
-    }
-    
-    private int calcularCantidad(Item item, List<Reserva> reservas) {
-        return (int) this.reservasConItem(item, reservas).stream().count();
-    }
-    
-    private double calcularPrecioPromedio(Item item, List<Reserva> reservas) {
-        List<Reserva> reservasDelItem = this.reservasConItem(item, reservas);
-        
-        return reservasDelItem.stream()
-                              .mapToDouble(reserva -> reserva.getCostoItem(item))
-                              .average()
-                              .orElse(0.0);
+    private ItemRanking armarFilaRanking(Item item, List<Reserva> reservas) {
+        int unidadesVendidas = 0;
+        double importeCobrado = 0.0;
+
+        for (Reserva reserva : reservas) {
+            for (DetalleReserva detalle : reserva.getDetallesReserva()) {
+                if (detalle.getItem() == item) {
+                    // El detalle representa el ítem comprado; un paquete se cuenta como paquete,
+                    // sin volver a contar sus componentes.
+                    unidadesVendidas += detalle.getCantidad();
+                    importeCobrado += detalle.getImporteTotal();
+                }
+            }
+        }
+
+        // El promedio se pondera por unidades: importe cobrado total dividido por unidades vendidas.
+        double precioPromedio = unidadesVendidas == 0 ? 0.0 : importeCobrado / unidadesVendidas;
+        return new ItemRanking(item.getNombre(), unidadesVendidas, precioPromedio);
     }
     
     
@@ -159,44 +167,61 @@ public class SistemaDeReporte {
     }
     
     // Seccion de exposicion por proveedor
+
+    private static final String PROVEEDOR_SIN_ASIGNAR = "Sin proveedor asignado";
     
     public String generarReporteExposicionProveedor(Formato formato) {
         List<Item> items = catalogo.getItems();
-        double totalItems = items.size();
-        
-        if (totalItems == 0) {
-            return new ExposicionPorProveedor(new ArrayList<>()).aceptar(formato);
-        }
-
-        List<ItemExposicion> listaFilas = this.armarFilasExposicion(items, totalItems);
-
+        List<ItemExposicion> listaFilas = this.armarFilasExposicion(items);
         ExposicionPorProveedor reporte = new ExposicionPorProveedor(listaFilas);
         return reporte.aceptar(formato);
     }
     
-    
-    private List<ItemExposicion> armarFilasExposicion(List<Item> items, double totalItems) {
-        List<ItemExposicion> listaFilas = new ArrayList<>();
-        
-        List<String> operadoresUnicos = items.stream()
-            .map(Item::getOperador)
-            .distinct()
-            .toList();
-        
-        for (String operador : operadoresUnicos) {
-            int cantidad = this.contarItemsDeOperador(operador, items);
-            double porcentaje = (cantidad / totalItems) * 100.0;
-            
-            listaFilas.add(new ItemExposicion(operador, cantidad, porcentaje));
+    private List<ItemExposicion> armarFilasExposicion(List<Item> items) {
+        Map<String, Double> pesosPorOperador = new LinkedHashMap<>();
+
+        for (Item item : items) {
+            Set<String> operadores = new LinkedHashSet<>();
+            recolectarOperadores(item, operadores, crearConjuntoPorIdentidad());
+            if (operadores.isEmpty()) {
+                operadores.add(PROVEEDOR_SIN_ASIGNAR);
+            }
+
+            // Cada entrada del catálogo pesa una unidad; los paquetes la distribuyen
+            // equitativamente entre sus proveedores distintos.
+            double pesoPorOperador = 1.0 / operadores.size();
+            for (String operador : operadores) {
+                pesosPorOperador.merge(operador, pesoPorOperador, Double::sum);
+            }
         }
-        
-        return listaFilas;
+
+        double totalItems = items.size();
+        return pesosPorOperador.entrySet().stream()
+                .map(entrada -> new ItemExposicion(
+                        entrada.getKey(),
+                        entrada.getValue(),
+                        (entrada.getValue() / totalItems) * 100.0))
+                .toList();
     }
-    
-    
-    private int contarItemsDeOperador(String operador, List<Item> items) {
-        return (int) items.stream()
-                          .filter(item -> item.getOperador().equals(operador))
-                          .count();
+
+    private void recolectarOperadores(Item item, Set<String> operadores, Set<Item> paquetesEnRecorrido) {
+        if (item instanceof PaqueteTuristico paquete) {
+            if (!paquetesEnRecorrido.add(paquete)) {
+                throw new IllegalArgumentException("La composición de paquetes contiene un ciclo.");
+            }
+            try {
+                for (Item componente : paquete.getItems()) {
+                    recolectarOperadores(componente, operadores, paquetesEnRecorrido);
+                }
+            } finally {
+                paquetesEnRecorrido.remove(paquete);
+            }
+            return;
+        }
+
+        String proveedor = item.getOperador();
+        if (proveedor != null && !proveedor.isBlank()) {
+            operadores.add(proveedor);
+        }
     }
 }

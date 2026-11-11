@@ -6,7 +6,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 class PaqueteTuristicoTest {
     private PaqueteTuristico paquete;
@@ -76,6 +81,44 @@ class PaqueteTuristicoTest {
         assertThrows(UnsupportedOperationException.class, () -> paquete.getItems().clear());
         assertEquals(1, paquete.getItems().size());
         assertThrows(NullPointerException.class, () -> paquete.agregarItem(null));
+    }
+
+    @Test
+    void exponeElCupoTotalDisponibleYLaCategoriaDelPaquete() {
+        assertEquals(1, paquete.getCupos());
+        assertEquals(1, paquete.getCuposTotales());
+        assertTrue(paquete.tieneCupoDisponible());
+        assertEquals("Paquete", paquete.getCategoria());
+        assertNull(paquete.getOperador());
+    }
+
+    @Test
+    void decrementoDelPaqueteRevierteLosItemsYaReservadosAnteUnFallo() {
+        Item primerItem = mock(Item.class);
+        Item sinDisponibilidad = mock(Item.class);
+        doThrow(new IllegalStateException("Sin cupo")).when(sinDisponibilidad).decrementarCupo();
+        paquete.agregarItem(primerItem);
+        paquete.agregarItem(sinDisponibilidad);
+
+        assertThrows(IllegalStateException.class, paquete::decrementarCupo);
+
+        verify(primerItem).decrementarCupo();
+        verify(primerItem).incrementarCupo();
+        assertEquals(1, paquete.getCupos());
+    }
+
+    @Test
+    void incrementoDelPaqueteRevierteLosItemsLiberadosAnteUnFallo() {
+        Item primerItem = mock(Item.class);
+        Item conFallo = mock(Item.class);
+        doThrow(new IllegalStateException("No estaba reservado")).when(conFallo).incrementarCupo();
+        paquete.agregarItem(primerItem);
+        paquete.agregarItem(conFallo);
+
+        assertThrows(IllegalStateException.class, paquete::incrementarCupo);
+
+        verify(primerItem).incrementarCupo();
+        verify(primerItem).decrementarCupo();
     }
 
     private static class ItemDePrueba implements Item {

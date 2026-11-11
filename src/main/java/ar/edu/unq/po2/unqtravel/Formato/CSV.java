@@ -33,11 +33,11 @@ public class CSV implements Formato{
 
 	@Override
 	public String visitarEPP(ExposicionPorProveedor e) {
-	    String resultado = "Operador,Cantidad de Items,Porcentaje\n";
+	    String resultado = "Operador,Items Equivalentes,Porcentaje\n";
 	    
 	    for (ItemExposicion item : e.getExposiciones()) {
 	        resultado = resultado + item.getOperador() + ","
-	                    + item.getCantidadItems() + ","
+	                    + item.getCantidadItemsEquivalentes() + ","
 	                    + item.getPorcentaje() + "%\n";
 	    }
 	    

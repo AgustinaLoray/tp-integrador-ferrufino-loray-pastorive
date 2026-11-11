@@ -2,6 +2,7 @@ package ar.edu.unq.po2.unqtravel.criterios;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 
@@ -72,6 +73,26 @@ public class CriterioTest {
         criterio.agregarCriterio(new CriterioPrecioMaximo(250000.0));
 
         assertEquals(List.of(item), catalogo.buscar(criterio));
+    }
+
+    @Test
+    public void catalogoCargaLaListaInicialYDevuelveUnaVistaInmodificable() {
+        List<Item> items = List.of(item);
+        Catalogo catalogo = new Catalogo(items);
+
+        assertEquals(List.of(item), catalogo.getItems());
+        assertThrows(UnsupportedOperationException.class, () -> catalogo.getItems().clear());
+    }
+
+    @Test
+    public void criterioCompuestoPuedeQuitarCriteriosYElAndVacioEsVacuamenteVerdadero() {
+        CriterioAND criterio = new CriterioAND();
+        CriterioBusqueda porCategoria = new CriterioCategoria("Alojamiento");
+        criterio.agregarCriterio(porCategoria);
+
+        criterio.borrarCriterio(porCategoria);
+
+        assertTrue(criterio.esSatisfechoPor(item));
     }
 
 

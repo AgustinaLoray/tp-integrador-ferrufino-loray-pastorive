@@ -51,6 +51,32 @@ class ServicioIndividualTest {
     }
 
     @Test
+    void exponeIdentidadProveedorYCuposYRechazaOperacionesFueraDeRango() {
+        ServicioIndividual hotel = crearHotel(0.0);
+
+        assertEquals(1, hotel.getId());
+        assertEquals("Operador sur", hotel.getProveedor());
+        assertEquals("Operador sur", hotel.getOperador());
+        assertEquals("Alojamiento", hotel.getCategoria());
+        assertEquals(2, hotel.getCupoMaximo());
+        assertEquals(2, hotel.getCuposTotales());
+        assertEquals(2, hotel.getCuposDisponibles());
+        assertTrue(hotel.tieneCupoDisponible());
+        assertThrows(IllegalStateException.class, hotel::incrementarCupo);
+
+        hotel.decrementarCupo();
+        hotel.decrementarCupo();
+        assertFalse(hotel.tieneCupoDisponible());
+        assertThrows(IllegalStateException.class, hotel::decrementarCupo);
+    }
+
+    @Test
+    void rechazaCapacidadNegativa() {
+        assertThrows(IllegalArgumentException.class, () -> new ServicioIndividual(
+                1, "Hotel", -1, "Proveedor", "Alojamiento", "Habitacion", 100.0, 0.0));
+    }
+
+    @Test
     void rechazaPrecioNuloONegativo() {
         assertThrows(IllegalArgumentException.class, () -> crearHotelConPrecio(null, 0.0));
         assertThrows(IllegalArgumentException.class, () -> crearHotelConPrecio(-1.0, 0.0));

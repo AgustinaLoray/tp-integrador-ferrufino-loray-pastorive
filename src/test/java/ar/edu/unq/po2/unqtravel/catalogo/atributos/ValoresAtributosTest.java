@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class ValoresAtributosTest {
     @Test
@@ -51,5 +53,32 @@ class ValoresAtributosTest {
         assertTrue(valor.esValido());
         valor.setValor(10);
         assertFalse(valor.esValido());
+    }
+
+    @Test
+    void atributoDinamicoExponeYActualizaSuDefinicion() {
+        AtributoDinamico atributo = new AtributoDinamico("nombre", true, new TipoString());
+
+        assertEquals("nombre", atributo.getNombre());
+        assertTrue(atributo.esObligatorio());
+        assertTrue(atributo.getTipo() instanceof TipoString);
+
+        atributo.setNombre("comentario");
+        atributo.setObligatorio(false);
+        atributo.setTipo(null);
+
+        assertEquals("comentario", atributo.getNombre());
+        assertFalse(atributo.esObligatorio());
+        assertTrue(atributo.esValido(null));
+        assertFalse(atributo.esValido("texto"));
+    }
+
+    @Test
+    void valorConAtributoNuloEsInvalidoPeroConservaSuValor() {
+        ValorAtributo valor = new ValorAtributo("texto", null);
+
+        assertFalse(valor.esValido());
+        assertEquals("texto", valor.getValor());
+        assertNull(valor.getAtributo());
     }
 }

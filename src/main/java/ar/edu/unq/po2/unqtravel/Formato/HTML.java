@@ -50,7 +50,7 @@ public class HTML implements Formato {
 	    for (ItemExposicion item : e.getExposiciones()) {
 	        resultado = resultado + "<li>" 
 	                    + item.getOperador() + " | " 
-	                    + "Cantidad: " + item.getCantidadItems() + " | "
+	                    + "Items equivalentes: " + item.getCantidadItemsEquivalentes() + " | "
 	                    + "Porcentaje: " + item.getPorcentaje() + "%"
 	                    + "</li>";
 	    }
