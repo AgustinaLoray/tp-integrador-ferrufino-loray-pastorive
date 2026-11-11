@@ -1,7 +1,6 @@
 package ar.edu.unq.po2.unqtravel.Estados;
 
 import ar.edu.unq.po2.unqtravel.Reserva.Reserva;
-import java.util.Objects;
 import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
 import ar.edu.unq.po2.unqtravel.Excepciones.Excepciones;
 

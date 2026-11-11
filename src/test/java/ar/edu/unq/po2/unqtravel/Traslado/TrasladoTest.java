@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import ar.edu.unq.po2.unqtravel.Traslado.Direccion;
 import ar.edu.unq.po2.unqtravel.Traslado.PuntoEncuentro;
-import ar.edu.unq.po2.unqtravel.Catalogo.Reserva;
+import ar.edu.unq.po2.unqtravel.Reserva.Reserva;
 
 class TrasladoTest {
 	TrasladoEstandarAdapter trasladoEstandar;

@@ -80,7 +80,7 @@ public class ServicioIndividual implements Item {
 
     @Override
     public String getNombre() {
-        return nombre;
+        return this.nombre;
     }
 
     @Override

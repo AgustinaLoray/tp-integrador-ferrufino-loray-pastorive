@@ -4,7 +4,7 @@ import java.util.List;
 
 import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
 
-public abstract class CriterioCompuesto {
+public abstract class CriterioCompuesto implements CriterioBusqueda{
     
     protected List<CriterioBusqueda> criterios;
 

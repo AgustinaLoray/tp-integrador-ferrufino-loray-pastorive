@@ -15,4 +15,5 @@ public class CriterioNOT extends CriterioCompuesto {
     public boolean esSatisfechoPor(Item item){
         return !this.criterios.stream().anyMatch(criterio -> criterio.esSatisfechoPor(item));
     }
+    
 }

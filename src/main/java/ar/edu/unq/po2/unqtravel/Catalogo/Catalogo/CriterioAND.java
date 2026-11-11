@@ -5,7 +5,6 @@ import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
 
 public class CriterioAND extends CriterioCompuesto {
 
-
     public CriterioAND(){
         super();
         this.criterios = new ArrayList<>();

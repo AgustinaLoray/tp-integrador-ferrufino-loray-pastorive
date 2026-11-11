@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.time.LocalDate;
 
 import ar.edu.unq.po2.unqtravel.Estados.Confirmada;
 import ar.edu.unq.po2.unqtravel.Estados.EnCurso;
@@ -32,7 +33,7 @@ public class DTFacturacionTest {
     
     @BeforeEach 
     public void setUp() {
-        reserva = new Reserva();
+        reserva = new Reserva(LocalDate.now(), LocalDate.now());
         System.setOut(new PrintStream(salidaCapturada));
         dtFacturacion = new DependencyTransformerFactura(new ObserverFacturacionConcreto());
     }

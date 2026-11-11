@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.time.LocalDate;
 
 import ar.edu.unq.po2.unqtravel.Estados.Cancelada;
 import ar.edu.unq.po2.unqtravel.Estados.Confirmada;
@@ -30,7 +31,7 @@ public class DTClubTest {
     
     @BeforeEach 
     public void setUp() {
-        reserva = new Reserva();
+        reserva = new Reserva(LocalDate.now(), LocalDate.now());
         System.setOut(new PrintStream(salidaCapturada));
         dtClub = new DependencyTransformerClub(new ObserverClubConcreto());
     }

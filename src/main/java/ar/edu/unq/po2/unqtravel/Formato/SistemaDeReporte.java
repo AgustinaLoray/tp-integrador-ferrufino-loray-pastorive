@@ -2,7 +2,6 @@ package ar.edu.unq.po2.unqtravel.Formato;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import ar.edu.unq.po2.unqtravel.Catalogo.Catalogo.Catalogo;
 import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
