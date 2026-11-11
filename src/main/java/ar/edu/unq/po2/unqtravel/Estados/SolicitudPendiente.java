@@ -15,12 +15,6 @@ public class SolicitudPendiente extends Estado {
     }
 
     @Override
-    public void confirmar(Reserva reserva) {
-        reserva.bloquearCupoDisponible();
-        reserva.cambiarEstado(new Confirmada());
-    }
-
-    @Override
     public void cancelar(Reserva reserva) {
         reserva.cambiarEstado(new Cancelada());
     }

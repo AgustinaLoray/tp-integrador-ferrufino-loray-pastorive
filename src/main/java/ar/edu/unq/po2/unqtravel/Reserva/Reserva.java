@@ -8,6 +8,7 @@ import ar.edu.unq.po2.unqtravel.Excepciones.Excepciones;
 import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
 import ar.edu.unq.po2.unqtravel.Estados.*;
 import ar.edu.unq.po2.unqtravel.Observer.ObserverReserva;
+import ar.edu.unq.po2.unqtravel.Traslado.MetodoTraslado;
 
 public class Reserva {
     private Estado estado;
@@ -16,11 +17,31 @@ public class Reserva {
     private final List<ObserverReserva> observers = new ArrayList<>();
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
+    private int cantidadPasajeros;
+    private MetodoTraslado metodoTraslado;
+    private List<DetalleReserva> detallesReserva = List.of();
+    private boolean pagoConfirmado;
 
-    public Reserva(LocalDate fechaInicio, LocalDate fechaFin) {
-        this.estado = new SolicitudPendiente();
+    public Reserva(LocalDate fechaInicio, LocalDate fechaFin, int cantidadPasajeros, MetodoTraslado metodoTraslado) {
+
+        if (fechaInicio == null || fechaFin == null) {
+            throw new IllegalArgumentException("Las fechas no pueden ser null");
+        }
+
+        if (fechaFin.isBefore(fechaInicio)) {
+            throw new IllegalArgumentException("La fecha de fin no puede ser anterior a la fecha de inicio");
+        }
+
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
+
+        if (cantidadPasajeros <= 0) {
+            throw new IllegalArgumentException("La cantidad de pasajeros debe ser un número positivo");
+        }
+
+        this.cantidadPasajeros = cantidadPasajeros;
+        this.metodoTraslado = Objects.requireNonNull(metodoTraslado, "El método de traslado no puede ser null");
+        this.estado = new SolicitudPendiente();
     }
 
     public Estado getEstado() {
@@ -76,12 +97,12 @@ public class Reserva {
     }
 
     public void cambiarEstado(Estado estado) {
-        this.estado = Objects.requireNonNull(estado, "El estado no puede ser null");
+        Estado nuevoEstado = Objects.requireNonNull(estado, "El estado no puede ser null");
+        if (nuevoEstado instanceof Confirmada && !this.pagoConfirmado) {
+            throw new Excepciones("No se puede confirmar una reserva sin un pago exitoso.");
+        }
+        this.estado = nuevoEstado;
         this.notificarObservers();
-    }
-
-    public void confirmar() {
-        this.estado.confirmar(this);
     }
 
     public void checkIn() {
@@ -133,11 +154,16 @@ public class Reserva {
     }
 
     public double getCostoServicios() {
+        if (this.pagoConfirmado) {
+            return this.detallesReserva.stream()
+                    .mapToDouble(DetalleReserva::getImporteTotal)
+                    .sum();
+        }
         return this.items.stream().mapToDouble(i -> i.getPrecioFinal()).sum();
     }
 
     public double getCostoTasas() {
-        return 0.0; //completar modulo 2.3
+        return this.metodoTraslado.calcularCosto(this);
     }
 
     public void generarVoucherDeReembolso(double monto) {
@@ -146,17 +172,60 @@ public class Reserva {
     
     //Metodos para la parte de traslado
     public float getValorTotal() {
-    	return 0;
+    	return (float) (this.getCostoServicios() + this.getCostoTasas());
     }
     
-    public int getCantidadPasajeros() {
-    	return 0;
+    List<DetalleReserva> prepararCotizacion() {
+        if (!(this.estado instanceof SolicitudPendiente)) {
+            throw new Excepciones("Solo se puede cotizar una reserva pendiente.");
+        }
+        if (this.items.isEmpty()) {
+            throw new Excepciones("No se puede confirmar una reserva sin items.");
+        }
+        return this.items.stream()
+                .map(item -> new DetalleReserva(item, item.getPrecioFinal(), 1))
+                .toList();
     }
-    
-    //Metodos para la parte de formato
-    
-    public double getCostoItem() {
-    	return 0.0; 
+
+    double calcularTotalCotizado(List<DetalleReserva> cotizacion) {
+        double costoServiciosCotizados = cotizacion.stream()
+                .mapToDouble(DetalleReserva::getImporteTotal)
+                .sum();
+        return costoServiciosCotizados + this.getCostoTasas();
+    }
+
+    void registrarPagoYConfirmar(List<DetalleReserva> cotizacion) {
+        if (!(this.estado instanceof SolicitudPendiente)) {
+            throw new Excepciones("Solo se puede confirmar una reserva pendiente.");
+        }
+        this.detallesReserva = List.copyOf(cotizacion);
+        this.pagoConfirmado = true;
+        this.cambiarEstado(new Confirmada());
+    }
+
+    public List<DetalleReserva> getDetallesReserva() {
+        return List.copyOf(this.detallesReserva);
+    }
+
+    public boolean tienePagoConfirmado() {
+        return this.pagoConfirmado;
+    }
+
+    public double getCostoItem(Item item) {
+        Objects.requireNonNull(item, "El item no puede ser null");
+        List<DetalleReserva> detallesDelItem = this.detallesReserva.stream()
+                .filter(detalle -> detalle.getItem() == item)
+                .toList();
+        if (detallesDelItem.isEmpty()) {
+            throw new IllegalStateException("La reserva no tiene un precio cobrado registrado para este item.");
+        }
+        int cantidadTotal = detallesDelItem.stream()
+                .mapToInt(DetalleReserva::getCantidad)
+                .sum();
+        double importeTotal = detallesDelItem.stream()
+                .mapToDouble(DetalleReserva::getImporteTotal)
+                .sum();
+        return importeTotal / cantidadTotal;
     }
     
     public LocalDate getFechaInicio() {
@@ -167,10 +236,7 @@ public class Reserva {
     	return fechaFin;
     }
     
-    
-    
-    
-    
-    
-
+    public int getCantidadPasajeros() {
+    	return cantidadPasajeros;
+    }
 }

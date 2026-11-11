@@ -36,6 +36,7 @@ public class SistemaDeReporte {
     
     private List<Reserva> reservasConItem(Item item, List<Reserva> reservas) {
         return reservas.stream()
+                       .filter(Reserva::tienePagoConfirmado)
                        .filter(r -> r.getItems().contains(item))
                        .toList();
     }
@@ -48,7 +49,7 @@ public class SistemaDeReporte {
         List<Reserva> reservasDelItem = this.reservasConItem(item, reservas);
         
         return reservasDelItem.stream()
-                              .mapToDouble(Reserva::getCostoItem)
+                              .mapToDouble(reserva -> reserva.getCostoItem(item))
                               .average()
                               .orElse(0.0);
     }
@@ -118,6 +119,4 @@ public class SistemaDeReporte {
                           .filter(item -> item.getOperador().equals(operador))
                           .count();
     }
-    
-    
 }

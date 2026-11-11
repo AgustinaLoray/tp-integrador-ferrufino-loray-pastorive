@@ -1,6 +1,8 @@
 package ar.edu.unq.po2.unqtravel.Observer.DependencyTransformer;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -9,12 +11,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.time.LocalDate;
 
-import ar.edu.unq.po2.unqtravel.Estados.Confirmada;
+import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
 import ar.edu.unq.po2.unqtravel.Estados.EnCurso;
 import ar.edu.unq.po2.unqtravel.Estados.Finalizada;
 import ar.edu.unq.po2.unqtravel.Observer.DependencyTransformerFactura;
 import ar.edu.unq.po2.unqtravel.Observer.ObserverFactura;
+import ar.edu.unq.po2.unqtravel.Reserva.ConfirmadorReserva;
 import ar.edu.unq.po2.unqtravel.Reserva.Reserva;
+import ar.edu.unq.po2.unqtravel.Traslado.PuntoEncuentro;
+import ar.edu.unq.po2.unqtravel.pagos.MetodoDePago;
 
 public class DTFacturacionTest {
 
@@ -33,7 +38,11 @@ public class DTFacturacionTest {
     
     @BeforeEach 
     public void setUp() {
-        reserva = new Reserva(LocalDate.now(), LocalDate.now());
+        reserva = new Reserva(
+                LocalDate.of(2026, 11, 10),
+                LocalDate.of(2026, 11, 11),
+                1,
+                new PuntoEncuentro(0));
         System.setOut(new PrintStream(salidaCapturada));
         dtFacturacion = new DependencyTransformerFactura(new ObserverFacturacionConcreto());
     }
@@ -55,7 +64,7 @@ public class DTFacturacionTest {
 
     @Test
     public void noNotificarFacturacionEnEstadoConfirmada() { // no debe notificar
-        reserva.cambiarEstado(new Confirmada());
+        confirmarReserva();
         
         dtFacturacion.notificar(reserva);
         
@@ -69,5 +78,22 @@ public class DTFacturacionTest {
         dtFacturacion.notificar(reserva);
         
         assertTrue(salidaCapturada.toString().isEmpty());
+    }
+
+    private void confirmarReserva() {
+        Item item = mock(Item.class);
+        org.mockito.Mockito.when(item.getPrecioFinal()).thenReturn(0.0);
+        reserva.agregarItem(item);
+        MetodoDePago pagoExitoso = new MetodoDePago() {
+            @Override
+            protected void validarDatos(double monto) {}
+
+            @Override
+            protected void reservarFondos(double monto) {}
+
+            @Override
+            protected void ejecutarTransaccion(double monto) {}
+        };
+        new ConfirmadorReserva().confirmar(reserva, pagoExitoso);
     }
 }

@@ -5,7 +5,13 @@ public abstract class MetodoDePago {
         this.validarDatos(monto);
         this.reservarFondos(monto);
         this.ejecutarTransaccion(monto);
-        this.notificarResultado();
+        try {
+            this.notificarResultado();
+        } catch (RuntimeException error) {
+            throw new NotificacionPagoException(
+                    "El pago se ejecutó, pero no se pudo notificar el resultado.",
+                    error);
+        }
     }
 
     protected abstract void validarDatos(double monto);

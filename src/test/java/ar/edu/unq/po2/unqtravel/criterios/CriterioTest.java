@@ -1,10 +1,14 @@
 package ar.edu.unq.po2.unqtravel.criterios;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import ar.edu.unq.po2.unqtravel.Catalogo.Catalogo.Catalogo;
 import ar.edu.unq.po2.unqtravel.Catalogo.Catalogo.CriterioBusqueda;
 import ar.edu.unq.po2.unqtravel.Catalogo.Catalogo.CriterioCategoria;
 import ar.edu.unq.po2.unqtravel.Catalogo.Catalogo.CriterioDisponibilidad;
@@ -21,32 +25,53 @@ public class CriterioTest {
 
     @BeforeEach 
     public void setUp() {
-        item = new ServicioIndividual(2, "Vuelo Directo a Bariloche", 150, "Aerolíneas Argentinas", "Vuelo", 
+        item = new ServicioIndividual(2, "Vuelo Directo a Bariloche", 2, "Aerolíneas Argentinas", "Vuelo",
                                         "Clase turista ida y vuelta", 250000.0, 0.0);
     }
 
     @Test 
     public void testCriterioPorNombre() {
-        CriterioBusqueda criterio = new CriterioNombre("Vuelo Directo a Bariloche");
+        CriterioBusqueda criterio = new CriterioNombre("DIRECTO A");
         assertTrue(criterio.esSatisfechoPor(item));
+        assertFalse(new CriterioNombre("hotel").esSatisfechoPor(item));
     }
 
     @Test 
     public void testCriterioPrecioMaximo() {
-        CriterioBusqueda criterio = new CriterioPrecioMaximo(300.0);
-        assertFalse(criterio.esSatisfechoPor(item));
+        assertTrue(new CriterioPrecioMaximo(250000.0).esSatisfechoPor(item));
+        assertFalse(new CriterioPrecioMaximo(249999.0).esSatisfechoPor(item));
     }
 
     @Test 
     public void testCriterioCategoria() {
-        CriterioCategoria criterio = new CriterioCategoria("Vuelo");
+        CriterioCategoria criterio = new CriterioCategoria("VUELO");
         assertTrue(criterio.esSatisfechoPor(item));
+        assertFalse(new CriterioCategoria("Alojamiento").esSatisfechoPor(item));
     }
 
     @Test 
     public void testCriterioDisponibilidad() {
         CriterioBusqueda criterio = new CriterioDisponibilidad();
         assertTrue(criterio.esSatisfechoPor(item));
+        item.decrementarCupo();
+        item.decrementarCupo();
+        assertFalse(criterio.esSatisfechoPor(item));
+    }
+
+    @Test
+    public void catalogoBuscaConUnCriterioYDevuelveSoloLosItemsCoincidentes() {
+        Catalogo catalogo = new Catalogo();
+        Item alojamiento = new ServicioIndividual(
+                3, "Hotel en Bariloche", 5, "Hotel Sur", "Alojamiento",
+                "Habitación doble", 180000.0, 0.0);
+        catalogo.agregarItem(item);
+        catalogo.agregarItem(alojamiento);
+
+        CriterioAND criterio = new CriterioAND();
+        criterio.agregarCriterio(new CriterioCategoria("Vuelo"));
+        criterio.agregarCriterio(new CriterioPrecioMaximo(250000.0));
+
+        assertEquals(List.of(item), catalogo.buscar(criterio));
     }
 
 
@@ -100,8 +125,13 @@ public class CriterioTest {
 
     @Test
     public void testCriterioNOT() {
-        CriterioNOT criterioNot = new CriterioNOT();
-        assertTrue(criterioNot.esSatisfechoPor(item));
+        CriterioNOT noAlojamiento = new CriterioNOT();
+        noAlojamiento.agregarCriterio(new CriterioCategoria("Alojamiento"));
+        assertTrue(noAlojamiento.esSatisfechoPor(item));
+
+        CriterioNOT noVuelo = new CriterioNOT();
+        noVuelo.agregarCriterio(new CriterioCategoria("Vuelo"));
+        assertFalse(noVuelo.esSatisfechoPor(item));
     }
 
     @Test

@@ -1,4 +1,12 @@
 /home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/test/java/ar/edu/unq/po2/unqtravel/EstadoYReserva/EstadosYReservaTest.java
+/home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/test/java/ar/edu/unq/po2/unqtravel/Observer/DependencyTransformer/DTClubTest.java
+/home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/test/java/ar/edu/unq/po2/unqtravel/Observer/DependencyTransformer/DTEmailTest.java
+/home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/test/java/ar/edu/unq/po2/unqtravel/Observer/DependencyTransformer/DTFacturacionTest.java
+/home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/test/java/ar/edu/unq/po2/unqtravel/Traslado/TrasladoTest.java
 /home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/test/java/ar/edu/unq/po2/unqtravel/catalogo/PaqueteTuristicoTest.java
 /home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/test/java/ar/edu/unq/po2/unqtravel/catalogo/ServicioIndividualTest.java
 /home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/test/java/ar/edu/unq/po2/unqtravel/catalogo/atributos/ValoresAtributosTest.java
+/home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/test/java/ar/edu/unq/po2/unqtravel/pagos/MetodoDePagoTest.java
+/home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/test/java/ar/edu/unq/po2/unqtravel/pagos/billeteraVirtual/BilleteraVirtualTest.java
+/home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/test/java/ar/edu/unq/po2/unqtravel/pagos/tarjetaInternacional/TarjetaInternacionalTest.java
+/home/octavio/workspace/tp-integrador-ferrufino-loray-pastorive/src/test/java/ar/edu/unq/po2/unqtravel/pagos/transferenciaDirecta/TransferenciaDirectaTest.java

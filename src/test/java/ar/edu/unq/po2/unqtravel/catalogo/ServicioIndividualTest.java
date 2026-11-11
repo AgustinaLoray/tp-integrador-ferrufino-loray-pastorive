@@ -44,10 +44,10 @@ class ServicioIndividualTest {
         ServicioIndividual hotel = crearHotel(0.0);
 
         hotel.decrementarCupo();
-        assertEquals(1, hotel.getCuposDisponibles());
+        assertEquals(1, hotel.getCupos());
 
         hotel.incrementarCupo();
-        assertEquals(2, hotel.getCuposDisponibles());
+        assertEquals(2, hotel.getCupos());
     }
 
     @Test

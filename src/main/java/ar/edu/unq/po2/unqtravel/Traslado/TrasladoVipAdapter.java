@@ -2,18 +2,14 @@ package ar.edu.unq.po2.unqtravel.Traslado;
 import ar.edu.unq.po2.unqtravel.Reserva.*;
 
 public class TrasladoVipAdapter implements MetodoTraslado {
-    private TrasladoVip libreriaVip; 
+    private final ApiTrasladoVip api;
 
-    public TrasladoVipAdapter(TrasladoVip libreriaVip) {
-        this.libreriaVip = libreriaVip;
+    public TrasladoVipAdapter(ApiTrasladoVip api) {
+        this.api = api;
     }
 
-    
-    public double calcularCosto(Reserva r) {
-     
-        float valorTotalReserva = r.getValorTotal();
-        
-      
-        return this.libreriaVip.calcularCosto(valorTotalReserva);
+    @Override
+    public double calcularCosto(Reserva reserva) {
+        return this.api.calcularCosto((float) reserva.getCostoServicios());
     }
 }

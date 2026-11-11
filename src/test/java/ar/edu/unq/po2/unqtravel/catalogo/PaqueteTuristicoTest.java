@@ -13,7 +13,7 @@ class PaqueteTuristicoTest {
 
     @BeforeEach
     void setUp() {
-        paquete = new PaqueteTuristico("Escapada", "Fin de semana", 0.10);
+        paquete = new PaqueteTuristico("Escapada", "Fin de semana", 0.10, "Paquete", 1);
     }
 
     @Test
@@ -62,8 +62,8 @@ class PaqueteTuristicoTest {
 
     @Test
     void rechazaDescuentosFueraDeRangoAlConstruirYAlActualizar() {
-        assertThrows(IllegalArgumentException.class, () -> new PaqueteTuristico("Paquete", "Descripcion", -0.01));
-        assertThrows(IllegalArgumentException.class, () -> new PaqueteTuristico("Paquete", "Descripcion", 1.01));
+        assertThrows(IllegalArgumentException.class, () -> new PaqueteTuristico("Paquete", "Descripcion", -0.01, "Paquete", 1));
+        assertThrows(IllegalArgumentException.class, () -> new PaqueteTuristico("Paquete", "Descripcion", 1.01, "Paquete", 1));
         assertThrows(IllegalArgumentException.class, () -> paquete.setDescuento(-0.01));
         assertThrows(IllegalArgumentException.class, () -> paquete.setDescuento(1.01));
     }
@@ -113,6 +113,26 @@ class PaqueteTuristicoTest {
 
         @Override
         public void incrementarCupo() {
+        }
+
+        @Override
+        public int getCupos() {
+            return 0;
+        }
+
+        @Override
+        public String getOperador() {
+            return "Operador";
+        }
+
+        @Override
+        public String getCategoria() {
+            return "Categoría";
+        }
+
+        @Override
+        public boolean tieneCupoDisponible() {
+            return true;
         }
     }
 }

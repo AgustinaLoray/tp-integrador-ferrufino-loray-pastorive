@@ -1,6 +1,8 @@
 package ar.edu.unq.po2.unqtravel.Observer.DependencyTransformer;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -10,10 +12,13 @@ import java.io.PrintStream;
 import java.time.LocalDate;
 
 import ar.edu.unq.po2.unqtravel.Estados.Cancelada;
-import ar.edu.unq.po2.unqtravel.Estados.Confirmada;
+import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
+import ar.edu.unq.po2.unqtravel.Reserva.ConfirmadorReserva;
 import ar.edu.unq.po2.unqtravel.Observer.DependencyTransformerClub;
 import ar.edu.unq.po2.unqtravel.Observer.ObserverClub;
 import ar.edu.unq.po2.unqtravel.Reserva.Reserva;
+import ar.edu.unq.po2.unqtravel.Traslado.PuntoEncuentro;
+import ar.edu.unq.po2.unqtravel.pagos.MetodoDePago;
 
 public class DTClubTest {
     private DependencyTransformerClub dtClub;
@@ -31,7 +36,11 @@ public class DTClubTest {
     
     @BeforeEach 
     public void setUp() {
-        reserva = new Reserva(LocalDate.now(), LocalDate.now());
+        reserva = new Reserva(
+                LocalDate.of(2026, 11, 10),
+                LocalDate.of(2026, 11, 11),
+                1,
+                new PuntoEncuentro(0));
         System.setOut(new PrintStream(salidaCapturada));
         dtClub = new DependencyTransformerClub(new ObserverClubConcreto());
     }
@@ -51,9 +60,26 @@ public class DTClubTest {
 
     @Test
     public void estadoConfirmada() { //estado confirmada asi que no deberia notificar al club
-        reserva.cambiarEstado(new Confirmada());
+        confirmarReserva();
         dtClub.notificar(reserva);
         assertTrue(salidaCapturada.toString().isEmpty());
+    }
+
+    private void confirmarReserva() {
+        Item item = mock(Item.class);
+        org.mockito.Mockito.when(item.getPrecioFinal()).thenReturn(0.0);
+        reserva.agregarItem(item);
+        MetodoDePago pagoExitoso = new MetodoDePago() {
+            @Override
+            protected void validarDatos(double monto) {}
+
+            @Override
+            protected void reservarFondos(double monto) {}
+
+            @Override
+            protected void ejecutarTransaccion(double monto) {}
+        };
+        new ConfirmadorReserva().confirmar(reserva, pagoExitoso);
     }
 
 }

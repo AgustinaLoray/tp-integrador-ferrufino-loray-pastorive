@@ -11,16 +11,34 @@ import ar.edu.unq.po2.unqtravel.Estados.*;
 import ar.edu.unq.po2.unqtravel.Catalogo.PaqueteTuristico.PaqueteTuristico;
 import ar.edu.unq.po2.unqtravel.Catalogo.ServicioIndividual.ServicioIndividual;
 import ar.edu.unq.po2.unqtravel.Excepciones.Excepciones;
+import ar.edu.unq.po2.unqtravel.Reserva.ConfirmadorReserva;
 import ar.edu.unq.po2.unqtravel.Reserva.Reserva;
+import ar.edu.unq.po2.unqtravel.Traslado.PuntoEncuentro;
+import ar.edu.unq.po2.unqtravel.pagos.MetodoDePago;
 
 public class EstadosYReservaTest {
     private Reserva reserva;
     private PaqueteTuristico vuelo;
     private ServicioIndividual hotel;
+    private final ConfirmadorReserva confirmador = new ConfirmadorReserva();
+    private final MetodoDePago pagoExitoso = new MetodoDePago() {
+        @Override
+        protected void validarDatos(double monto) {}
+
+        @Override
+        protected void reservarFondos(double monto) {}
+
+        @Override
+        protected void ejecutarTransaccion(double monto) {}
+    };
 
     @BeforeEach
     public void setUp() {
-        reserva = new Reserva(LocalDate.now(), LocalDate.now().plusDays(7)); // se inicializa en solicitud pendiente
+        reserva = new Reserva(
+                LocalDate.of(2026, 11, 10),
+                LocalDate.of(2026, 11, 17),
+                1,
+                new PuntoEncuentro(0));
 
         vuelo = new PaqueteTuristico (
             "Vuelo Buenos Aires - Mendoza", 
@@ -57,7 +75,7 @@ public class EstadosYReservaTest {
     public void testReservaExitosa() { //desde solicitudPendiente a finalizada
         reserva.agregarItem(vuelo);
 
-        reserva.confirmar();
+        confirmarReserva();
         assertInstanceOf(Confirmada.class, reserva.getEstado());
 
         reserva.checkIn();
@@ -74,7 +92,7 @@ public class EstadosYReservaTest {
     public void bloquaElCupoDisponible() {
         assertInstanceOf(SolicitudPendiente.class, reserva.getEstado());
         reserva.agregarItem(hotel);
-        reserva.confirmar();
+        confirmarReserva();
         assertEquals(19, hotel.getCupos());
     }
 
@@ -82,7 +100,7 @@ public class EstadosYReservaTest {
     public void liberaElCupoDisponible() {
         assertInstanceOf(SolicitudPendiente.class, reserva.getEstado());
         reserva.agregarItem(hotel);
-        reserva.confirmar();
+        confirmarReserva();
         reserva.cancelar();
         assertEquals(20, hotel.getCupos());
     }
@@ -90,7 +108,7 @@ public class EstadosYReservaTest {
     @Test 
     public void liberaCupoYReembolso() {
         reserva.agregarItem(hotel);
-        reserva.confirmar();
+        confirmarReserva();
         reserva.checkIn();
         reserva.cancelar();
         assertInstanceOf(Cancelada.class, reserva.getEstado());
@@ -102,8 +120,9 @@ public class EstadosYReservaTest {
     public void rechazaTransicionesNoPermitidas() {
         assertThrows(Excepciones.class, () -> reserva.checkIn());
 
-        reserva.confirmar();
-        assertThrows(Excepciones.class, () -> reserva.confirmar());
+        reserva.agregarItem(hotel);
+        confirmarReserva();
+        assertThrows(Excepciones.class, this::confirmarReserva);
 
         reserva.checkIn();
         reserva.iniciarViaje();
@@ -114,7 +133,7 @@ public class EstadosYReservaTest {
     @Test
     public void lasColeccionesDeReservaSonInmodificablesYRechazaItemsNulos() {
         assertThrows(UnsupportedOperationException.class, () -> reserva.getItems().add(vuelo));
-        assertThrows(IllegalArgumentException.class, () -> reserva.agregarItem(null));
+        assertThrows(NullPointerException.class, () -> reserva.agregarItem(null));
         assertTrue(reserva.getItems().isEmpty());
     }
 
@@ -125,11 +144,14 @@ public class EstadosYReservaTest {
         reserva.agregarItem(hotel);
         reserva.agregarItem(sinCupo);
 
-        IllegalStateException error = assertThrows(IllegalStateException.class, reserva::confirmar);
+        assertThrows(Excepciones.class, this::confirmarReserva);
 
-        assertInstanceOf(IllegalStateException.class, error.getCause());
         assertEquals(20, hotel.getCupos());
         assertEquals(0, sinCupo.getCupos());
         assertInstanceOf(SolicitudPendiente.class, reserva.getEstado());
+    }
+
+    private void confirmarReserva() {
+        confirmador.confirmar(reserva, pagoExitoso);
     }
 }

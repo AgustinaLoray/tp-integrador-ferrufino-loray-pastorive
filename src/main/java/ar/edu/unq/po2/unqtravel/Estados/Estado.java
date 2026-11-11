@@ -26,10 +26,6 @@ public abstract class Estado {
         throw new Excepciones("No se puede quitar items");
     }
 
-    public void confirmar(Reserva reserva) {
-        throw new Excepciones("No se puede confirmar la reserva en el estado actual.");
-    }
-
     public void checkIn(Reserva reserva) {
         throw new Excepciones("No se puede realizar el check-in en el estado actual.");
     }
