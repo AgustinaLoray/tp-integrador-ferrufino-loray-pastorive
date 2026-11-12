@@ -2,6 +2,7 @@ package ar.edu.unq.po2.unqtravel.catalogo;
 
 import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
 import ar.edu.unq.po2.unqtravel.Catalogo.PaqueteTuristico.PaqueteTuristico;
+import ar.edu.unq.po2.unqtravel.Excepciones.Excepciones;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -67,10 +68,10 @@ class PaqueteTuristicoTest {
 
     @Test
     void rechazaDescuentosFueraDeRangoAlConstruirYAlActualizar() {
-        assertThrows(IllegalArgumentException.class, () -> new PaqueteTuristico("Paquete", "Descripcion", -0.01, "Paquete", 1));
-        assertThrows(IllegalArgumentException.class, () -> new PaqueteTuristico("Paquete", "Descripcion", 1.01, "Paquete", 1));
-        assertThrows(IllegalArgumentException.class, () -> paquete.setDescuento(-0.01));
-        assertThrows(IllegalArgumentException.class, () -> paquete.setDescuento(1.01));
+        assertThrows(Excepciones.class, () -> new PaqueteTuristico("Paquete", "Descripcion", -0.01, "Paquete", 1));
+        assertThrows(Excepciones.class, () -> new PaqueteTuristico("Paquete", "Descripcion", 1.01, "Paquete", 1));
+        assertThrows(Excepciones.class, () -> paquete.setDescuento(-0.01));
+        assertThrows(Excepciones.class, () -> paquete.setDescuento(1.01));
     }
 
     @Test
@@ -80,7 +81,7 @@ class PaqueteTuristicoTest {
 
         assertThrows(UnsupportedOperationException.class, () -> paquete.getItems().clear());
         assertEquals(1, paquete.getItems().size());
-        assertThrows(NullPointerException.class, () -> paquete.agregarItem(null));
+        assertThrows(Excepciones.class, () -> paquete.agregarItem(null));
     }
 
     @Test
@@ -100,7 +101,7 @@ class PaqueteTuristicoTest {
         paquete.agregarItem(primerItem);
         paquete.agregarItem(sinDisponibilidad);
 
-        assertThrows(IllegalStateException.class, paquete::decrementarCupo);
+        assertThrows(Excepciones.class, paquete::decrementarCupo);
 
         verify(primerItem).decrementarCupo();
         verify(primerItem).incrementarCupo();
@@ -115,7 +116,7 @@ class PaqueteTuristicoTest {
         paquete.agregarItem(primerItem);
         paquete.agregarItem(conFallo);
 
-        assertThrows(IllegalStateException.class, paquete::incrementarCupo);
+        assertThrows(Excepciones.class, paquete::incrementarCupo);
 
         verify(primerItem).incrementarCupo();
         verify(primerItem).decrementarCupo();

@@ -2,9 +2,9 @@ package ar.edu.unq.po2.unqtravel.Catalogo.ServicioIndividual;
 
 import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
 import ar.edu.unq.po2.unqtravel.Catalogo.atributos.ValorAtributo;
+import ar.edu.unq.po2.unqtravel.Excepciones.Excepciones;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class ServicioIndividual implements Item {
     private int id;
@@ -20,19 +20,19 @@ public class ServicioIndividual implements Item {
 
     public ServicioIndividual(int id, String nombre, int cupoMaximo, String proveedor, String categoria, String descripcion, Double precioBase, Double descuento) {
         if (cupoMaximo < 0) {
-            throw new IllegalArgumentException("Se alcanzo el limite de cupos");
+            throw new Excepciones("Se alcanzo el limite de cupos");
         }
 
         if (precioBase == null) {
-            throw new IllegalArgumentException("El precio base no puede ser null");
+            throw new Excepciones("El precio base no puede ser null");
         }
         if (precioBase < 0) {
-            throw new IllegalArgumentException("El precio base no puede ser negativo");
+            throw new Excepciones("El precio base no puede ser negativo");
         }
 
         double descuentoValidado = descuento != null ? descuento : 0.0;
         if (descuentoValidado < 0 || descuentoValidado > 1) {
-            throw new IllegalArgumentException("El descuento debe estar entre 0 y 1");
+            throw new Excepciones("El descuento debe estar entre 0 y 1");
         }
         
         this.id = id;
@@ -56,7 +56,10 @@ public class ServicioIndividual implements Item {
     }
 
     public void agregarAtributo(ValorAtributo atributo) {
-        this.atributos.add(Objects.requireNonNull(atributo, "Se debe ingresar un atributo"));
+        if (atributo == null) {
+            throw new Excepciones("Se debe ingresar un atributo");
+        }
+        this.atributos.add(atributo);
     }
 
     public boolean esValido() {
@@ -107,7 +110,7 @@ public class ServicioIndividual implements Item {
     @Override
     public void decrementarCupo() {
         if (this.cuposDisponibles == 0) {
-            throw new IllegalStateException("No hay cupos disponibles para " + this.nombre);
+            throw new Excepciones("No hay cupos disponibles para " + this.nombre);
         }
         this.cuposDisponibles--;
     }
@@ -115,7 +118,7 @@ public class ServicioIndividual implements Item {
     @Override
     public void incrementarCupo() {
         if (this.cuposDisponibles >= this.cupoMaximo) {
-            throw new IllegalStateException("No hay cupos reservados para liberar en " + this.nombre);
+            throw new Excepciones("No hay cupos reservados para liberar en " + this.nombre);
         }
         this.cuposDisponibles++;
     }

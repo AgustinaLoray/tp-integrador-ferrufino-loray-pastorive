@@ -1,5 +1,6 @@
 package ar.edu.unq.po2.unqtravel.pagos.billeteraVirtual;
 
+import ar.edu.unq.po2.unqtravel.Excepciones.Excepciones;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
@@ -33,7 +34,7 @@ class BilleteraVirtualTest {
         doThrow(new IllegalArgumentException("monto inválido")).when(api).validar(45.75);
         BilleteraVirtual billetera = new BilleteraVirtual(api);
 
-        assertThrows(IllegalArgumentException.class, () -> billetera.procesarPago(45.75));
+        assertThrows(Excepciones.class, () -> billetera.procesarPago(45.75));
 
         verify(api).validar(45.75);
         verifyNoMoreInteractions(api);
@@ -46,7 +47,7 @@ class BilleteraVirtualTest {
                 .when(api).bloquearFondos(45.75);
         BilleteraVirtual billetera = new BilleteraVirtual(api);
 
-        assertThrows(IllegalStateException.class, () -> billetera.procesarPago(45.75));
+        assertThrows(Excepciones.class, () -> billetera.procesarPago(45.75));
 
         InOrder orden = inOrder(api);
         orden.verify(api).validar(45.75);
@@ -61,7 +62,7 @@ class BilleteraVirtualTest {
                 .when(api).ejecutarTransaccion(45.75);
         BilleteraVirtual billetera = new BilleteraVirtual(api);
 
-        assertThrows(IllegalStateException.class, () -> billetera.procesarPago(45.75));
+        assertThrows(Excepciones.class, () -> billetera.procesarPago(45.75));
 
         InOrder orden = inOrder(api);
         orden.verify(api).validar(45.75);

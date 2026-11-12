@@ -4,6 +4,7 @@ import ar.edu.unq.po2.unqtravel.Catalogo.ServicioIndividual.ServicioIndividual;
 import ar.edu.unq.po2.unqtravel.Catalogo.atributos.AtributoDinamico;
 import ar.edu.unq.po2.unqtravel.Catalogo.atributos.TipoString;
 import ar.edu.unq.po2.unqtravel.Catalogo.atributos.ValorAtributo;
+import ar.edu.unq.po2.unqtravel.Excepciones.Excepciones;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -62,31 +63,31 @@ class ServicioIndividualTest {
         assertEquals(2, hotel.getCuposTotales());
         assertEquals(2, hotel.getCuposDisponibles());
         assertTrue(hotel.tieneCupoDisponible());
-        assertThrows(IllegalStateException.class, hotel::incrementarCupo);
+        assertThrows(Excepciones.class, hotel::incrementarCupo);
 
         hotel.decrementarCupo();
         hotel.decrementarCupo();
         assertFalse(hotel.tieneCupoDisponible());
-        assertThrows(IllegalStateException.class, hotel::decrementarCupo);
+        assertThrows(Excepciones.class, hotel::decrementarCupo);
     }
 
     @Test
     void rechazaCapacidadNegativa() {
-        assertThrows(IllegalArgumentException.class, () -> new ServicioIndividual(
+        assertThrows(Excepciones.class, () -> new ServicioIndividual(
                 1, "Hotel", -1, "Proveedor", "Alojamiento", "Habitacion", 100.0, 0.0));
     }
 
     @Test
     void rechazaPrecioNuloONegativo() {
-        assertThrows(IllegalArgumentException.class, () -> crearHotelConPrecio(null, 0.0));
-        assertThrows(IllegalArgumentException.class, () -> crearHotelConPrecio(-1.0, 0.0));
+        assertThrows(Excepciones.class, () -> crearHotelConPrecio(null, 0.0));
+        assertThrows(Excepciones.class, () -> crearHotelConPrecio(-1.0, 0.0));
     }
 
     @Test
     void aceptaDescuentoNuloComoCeroYRechazaValoresFueraDeRango() {
         assertEquals(100.0, crearHotelConPrecio(100.0, null).getPrecioFinal());
-        assertThrows(IllegalArgumentException.class, () -> crearHotelConPrecio(100.0, -0.01));
-        assertThrows(IllegalArgumentException.class, () -> crearHotelConPrecio(100.0, 1.01));
+        assertThrows(Excepciones.class, () -> crearHotelConPrecio(100.0, -0.01));
+        assertThrows(Excepciones.class, () -> crearHotelConPrecio(100.0, 1.01));
     }
 
     @Test
@@ -94,7 +95,7 @@ class ServicioIndividualTest {
         ServicioIndividual hotel = crearHotel(0.0);
 
         assertThrows(UnsupportedOperationException.class, () -> hotel.getAtributos().clear());
-        assertThrows(NullPointerException.class, () -> hotel.agregarAtributo(null));
+        assertThrows(Excepciones.class, () -> hotel.agregarAtributo(null));
         assertTrue(hotel.getAtributos().isEmpty());
     }
 

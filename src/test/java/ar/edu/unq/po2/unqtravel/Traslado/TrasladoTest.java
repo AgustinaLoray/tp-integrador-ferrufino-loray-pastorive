@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 
 import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
+import ar.edu.unq.po2.unqtravel.Excepciones.Excepciones;
 import ar.edu.unq.po2.unqtravel.Reserva.Reserva;
 
 class TrasladoTest {
@@ -20,11 +21,11 @@ class TrasladoTest {
         LocalDate inicio = LocalDate.of(2026, 11, 10);
         LocalDate fin = LocalDate.of(2026, 11, 12);
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(Excepciones.class,
                 () -> new Reserva(inicio, fin, 0, new PuntoEncuentro(0)));
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(Excepciones.class,
                 () -> new Reserva(inicio, fin, -1, new PuntoEncuentro(0)));
-        assertThrows(NullPointerException.class,
+        assertThrows(Excepciones.class,
                 () -> new Reserva(inicio, fin, 1, null));
     }
 

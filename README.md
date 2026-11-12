@@ -30,6 +30,16 @@ Si un ítem no tiene proveedor informado, su peso se atribuye al grupo
 generación del reporte. Una composición cíclica de paquetes se considera
 inválida y se rechaza explícitamente.
 
+### Excepciones del dominio
+
+Las validaciones y los errores de operación propios del dominio se representan
+con `Excepciones`, que conserva el mensaje y, cuando corresponde, la causa
+original. `NotificacionPagoException` es un subtipo específico: permite
+distinguir un pago ya ejecutado cuya notificación posterior falló. Los errores
+de APIs externas se traducen a la excepción propia en el límite del flujo de
+pago, mientras que los errores de las colecciones inmutables de Java siguen
+siendo los definidos por la JDK.
+
 ## Pruebas y cobertura
 
 Ejecutar la suite completa y verificar los umbrales de cobertura con:
@@ -40,8 +50,8 @@ mvn clean verify
 
 JaCoCo controla una cobertura global mínima del 95 % de líneas para el código
 de producción y mantiene además un mínimo del 80 % de líneas para los paquetes
-de pago. La medición limpia más reciente alcanzó 99,3 % de líneas (739 de 744)
-con 109 pruebas, sin fallos ni errores. La cobertura se calcula sobre las
+de pago. La medición limpia más reciente alcanzó 99,2 % de líneas (772 de 778)
+con 110 pruebas, sin fallos ni errores. La cobertura se calcula sobre las
 clases de producción instrumentadas por JaCoCo; no es una medición de ramas.
 
 Las pruebas principales cubren:

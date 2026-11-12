@@ -1,9 +1,9 @@
 package ar.edu.unq.po2.unqtravel.Catalogo.PaqueteTuristico;
 
 import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
+import ar.edu.unq.po2.unqtravel.Excepciones.Excepciones;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class PaqueteTuristico implements Item {
     private String nombre;
@@ -38,7 +38,10 @@ public class PaqueteTuristico implements Item {
     }
 
     public void agregarItem(Item item) {
-        this.items.add(Objects.requireNonNull(item, "El item no puede ser null"));
+        if (item == null) {
+            throw new Excepciones("El item no puede ser null");
+        }
+        this.items.add(item);
     }
 
     public void quitarItem(Item item) {
@@ -59,7 +62,7 @@ public class PaqueteTuristico implements Item {
                 reservados.get(i).incrementarCupo();
                 this.cupos++;
             }
-            throw error;
+            throw new Excepciones("No se pudo reservar el cupo de todos los items del paquete.", error);
         }
     }
 
@@ -75,7 +78,7 @@ public class PaqueteTuristico implements Item {
             for (int i = liberados.size() - 1; i >= 0; i--) {
                 liberados.get(i).decrementarCupo();
             }
-            throw error;
+            throw new Excepciones("No se pudo liberar el cupo de todos los items del paquete.", error);
         }
     }
 
@@ -116,7 +119,7 @@ public class PaqueteTuristico implements Item {
     private double validarDescuento(Double descuento) {
         double descuentoValidado = descuento != null ? descuento : 0.0;
         if (descuentoValidado < 0 || descuentoValidado > 1) {
-            throw new IllegalArgumentException("El descuento debe estar entre 0 y 1");
+            throw new Excepciones("El descuento debe estar entre 0 y 1");
         }
         return descuentoValidado;
     }

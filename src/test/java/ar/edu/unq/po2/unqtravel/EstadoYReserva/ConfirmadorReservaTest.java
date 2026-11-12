@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
 import ar.edu.unq.po2.unqtravel.Estados.Confirmada;
 import ar.edu.unq.po2.unqtravel.Estados.SolicitudPendiente;
+import ar.edu.unq.po2.unqtravel.Excepciones.Excepciones;
 import ar.edu.unq.po2.unqtravel.Reserva.ConfirmadorReserva;
 import ar.edu.unq.po2.unqtravel.Reserva.Reserva;
 import ar.edu.unq.po2.unqtravel.Traslado.PuntoEncuentro;
@@ -51,7 +52,7 @@ class ConfirmadorReservaTest {
             }
         };
 
-        assertThrows(IllegalStateException.class,
+        assertThrows(Excepciones.class,
                 () -> new ConfirmadorReserva().confirmar(reserva, pagoFallido));
 
         org.mockito.Mockito.verify(item).decrementarCupo();
@@ -120,10 +121,11 @@ class ConfirmadorReservaTest {
             }
         };
 
-        IllegalArgumentException error = assertThrows(IllegalArgumentException.class,
+        Excepciones error = assertThrows(Excepciones.class,
                 () -> new ConfirmadorReserva().confirmar(reserva, pagoFallido));
 
-        assertEquals("Pago rechazado", error.getMessage());
+        assertEquals("No se pudo ejecutar la transacción.", error.getMessage());
+        assertEquals("Pago rechazado", error.getCause().getMessage());
         assertEquals(1, error.getSuppressed().length);
         org.mockito.Mockito.verify(item).decrementarCupo();
     }
@@ -131,8 +133,8 @@ class ConfirmadorReservaTest {
     @Test
     void rechazaArgumentosNulosDelConfirmador() {
         ConfirmadorReserva confirmador = new ConfirmadorReserva();
-        assertThrows(NullPointerException.class, () -> confirmador.confirmar(null, new PagoDePrueba()));
-        assertThrows(NullPointerException.class, () -> confirmador.confirmar(nuevaReserva(), null));
+        assertThrows(Excepciones.class, () -> confirmador.confirmar(null, new PagoDePrueba()));
+        assertThrows(Excepciones.class, () -> confirmador.confirmar(nuevaReserva(), null));
     }
 
     private Reserva nuevaReserva() {

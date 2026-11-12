@@ -20,6 +20,7 @@ import ar.edu.unq.po2.unqtravel.Catalogo.Catalogo.CriterioOR;
 import ar.edu.unq.po2.unqtravel.Catalogo.Catalogo.CriterioNOT;
 import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
 import ar.edu.unq.po2.unqtravel.Catalogo.ServicioIndividual.ServicioIndividual;
+import ar.edu.unq.po2.unqtravel.Excepciones.Excepciones;
 
 public class CriterioTest {
     private Item item;
@@ -82,6 +83,16 @@ public class CriterioTest {
 
         assertEquals(List.of(item), catalogo.getItems());
         assertThrows(UnsupportedOperationException.class, () -> catalogo.getItems().clear());
+    }
+
+    @Test
+    public void catalogoYElCriterioCategoriaRechazanArgumentosNulosConExcepcionPropia() {
+        Catalogo catalogo = new Catalogo();
+
+        assertThrows(Excepciones.class, () -> new Catalogo(null));
+        assertThrows(Excepciones.class, () -> catalogo.agregarItem(null));
+        assertThrows(Excepciones.class, () -> catalogo.buscar(null));
+        assertThrows(Excepciones.class, () -> new CriterioCategoria(null));
     }
 
     @Test

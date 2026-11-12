@@ -17,6 +17,7 @@ import ar.edu.unq.po2.unqtravel.Catalogo.PaqueteTuristico.PaqueteTuristico;
 import ar.edu.unq.po2.unqtravel.Catalogo.ServicioIndividual.ServicioIndividual;
 import ar.edu.unq.po2.unqtravel.Estados.Cancelada;
 import ar.edu.unq.po2.unqtravel.Estados.Confirmada;
+import ar.edu.unq.po2.unqtravel.Excepciones.Excepciones;
 import ar.edu.unq.po2.unqtravel.Reserva.DetalleReserva;
 import ar.edu.unq.po2.unqtravel.Reserva.ConfirmadorReserva;
 import ar.edu.unq.po2.unqtravel.Reserva.Reserva;
@@ -56,7 +57,7 @@ class SistemaDeReporteTest {
         Catalogo catalogo = new Catalogo();
         catalogo.agregarItem(paquete);
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(Excepciones.class,
                 () -> sistemaDeReporte(catalogo).generarReporteCuposDisponibles(
                         LocalDate.of(2026, 11, 10),
                         LocalDate.of(2026, 11, 12),
@@ -121,7 +122,7 @@ class SistemaDeReporteTest {
         GestorDeReserva gestor = new GestorDeReserva();
         gestor.agregarReserva(reservaPagada);
 
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(Excepciones.class,
                 () -> new SistemaDeReporte(gestor, catalogo).generarReporteCuposDisponibles(
                         LocalDate.of(2026, 11, 10),
                         LocalDate.of(2026, 11, 12),

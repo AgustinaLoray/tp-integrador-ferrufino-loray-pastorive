@@ -1,5 +1,6 @@
 package ar.edu.unq.po2.unqtravel.pagos;
 
+import ar.edu.unq.po2.unqtravel.Excepciones.Excepciones;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -54,12 +55,21 @@ class MetodoDePagoTest {
         List<String> pasos = new ArrayList<>();
         MetodoDePago metodo = new MetodoDePagoRegistrado(pasos, pasoQueFalla);
 
-        IllegalStateException excepcion = assertThrows(
-                IllegalStateException.class,
+        Excepciones excepcion = assertThrows(
+                Excepciones.class,
                 () -> metodo.procesarPago(50));
 
-        assertEquals(pasoQueFalla, excepcion.getMessage());
+        assertEquals("No se pudo " + descripcionDelPaso(pasoQueFalla) + ".", excepcion.getMessage());
+        assertEquals(pasoQueFalla, excepcion.getCause().getMessage());
         assertEquals(pasosEsperados, pasos);
+    }
+
+    private String descripcionDelPaso(String paso) {
+        return switch (paso) {
+            case "validar" -> "validar los datos del pago";
+            case "reservar" -> "reservar los fondos";
+            default -> "ejecutar la transacción";
+        };
     }
 
     private static class MetodoDePagoRegistrado extends MetodoDePago {

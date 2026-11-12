@@ -2,7 +2,6 @@ package ar.edu.unq.po2.unqtravel.Reserva;
 import java.util.List;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Objects;
 import ar.edu.unq.po2.unqtravel.Excepciones.Excepciones;
 
 import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
@@ -25,22 +24,25 @@ public class Reserva {
     public Reserva(LocalDate fechaInicio, LocalDate fechaFin, int cantidadPasajeros, MetodoTraslado metodoTraslado) {
 
         if (fechaInicio == null || fechaFin == null) {
-            throw new IllegalArgumentException("Las fechas no pueden ser null");
+            throw new Excepciones("Las fechas no pueden ser null");
         }
 
         if (fechaFin.isBefore(fechaInicio)) {
-            throw new IllegalArgumentException("La fecha de fin no puede ser anterior a la fecha de inicio");
+            throw new Excepciones("La fecha de fin no puede ser anterior a la fecha de inicio");
         }
 
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
 
         if (cantidadPasajeros <= 0) {
-            throw new IllegalArgumentException("La cantidad de pasajeros debe ser un número positivo");
+            throw new Excepciones("La cantidad de pasajeros debe ser un número positivo");
+        }
+        if (metodoTraslado == null) {
+            throw new Excepciones("El método de traslado no puede ser null");
         }
 
         this.cantidadPasajeros = cantidadPasajeros;
-        this.metodoTraslado = Objects.requireNonNull(metodoTraslado, "El método de traslado no puede ser null");
+        this.metodoTraslado = metodoTraslado;
         this.estado = new SolicitudPendiente();
     }
 
@@ -65,7 +67,10 @@ public class Reserva {
     }
 
     public void agregarItemDirecto(Item item) {
-        this.items.add(Objects.requireNonNull(item, "El item no puede ser null"));
+        if (item == null) {
+            throw new Excepciones("El item no puede ser null");
+        }
+        this.items.add(item);
     }
 
     public void quitarItemDirecto(Item item) {
@@ -89,7 +94,10 @@ public class Reserva {
     }
 
     public void agregarItemPendiente(Item item) {
-        items.add(Objects.requireNonNull(item, "El item no puede ser null"));
+        if (item == null) {
+            throw new Excepciones("El item no puede ser null");
+        }
+        items.add(item);
     }
 
     public void quitarItemPendiente(Item item) {
@@ -97,7 +105,10 @@ public class Reserva {
     }
 
     public void cambiarEstado(Estado estado) {
-        Estado nuevoEstado = Objects.requireNonNull(estado, "El estado no puede ser null");
+        if (estado == null) {
+            throw new Excepciones("El estado no puede ser null");
+        }
+        Estado nuevoEstado = estado;
         if (nuevoEstado instanceof Confirmada && !this.pagoConfirmado) {
             throw new Excepciones("No se puede confirmar una reserva sin un pago exitoso.");
         }
@@ -133,7 +144,9 @@ public class Reserva {
             for (int i = itemBloqueados.size() - 1; i >= 0; i--) {
                 itemBloqueados.get(i).incrementarCupo();
             }
-            throw new Excepciones("No se pudo bloquear el cupo disponible para todos los items. Se han revertido los cambios.");
+            throw new Excepciones(
+                    "No se pudo bloquear el cupo disponible para todos los items. Se han revertido los cambios.",
+                    error);
         }
     }
 
@@ -149,7 +162,9 @@ public class Reserva {
             for (int i = itemLiberados.size() - 1; i >= 0; i--) {
                 itemLiberados.get(i).decrementarCupo();
             }
-            throw new Excepciones("No se pudo liberar el cupo para todos los items. Se han revertido los cambios.");
+            throw new Excepciones(
+                    "No se pudo liberar el cupo para todos los items. Se han revertido los cambios.",
+                    error);
         }
     }
 
@@ -212,12 +227,14 @@ public class Reserva {
     }
 
     public double getCostoItem(Item item) {
-        Objects.requireNonNull(item, "El item no puede ser null");
+        if (item == null) {
+            throw new Excepciones("El item no puede ser null");
+        }
         List<DetalleReserva> detallesDelItem = this.detallesReserva.stream()
                 .filter(detalle -> detalle.getItem() == item)
                 .toList();
         if (detallesDelItem.isEmpty()) {
-            throw new IllegalStateException("La reserva no tiene un precio cobrado registrado para este item.");
+            throw new Excepciones("La reserva no tiene un precio cobrado registrado para este item.");
         }
         int cantidadTotal = detallesDelItem.stream()
                 .mapToInt(DetalleReserva::getCantidad)

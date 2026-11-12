@@ -146,7 +146,7 @@ public class EstadosYReservaTest {
     @Test
     public void lasColeccionesDeReservaSonInmodificablesYRechazaItemsNulos() {
         assertThrows(UnsupportedOperationException.class, () -> reserva.getItems().add(vuelo));
-        assertThrows(NullPointerException.class, () -> reserva.agregarItem(null));
+        assertThrows(Excepciones.class, () -> reserva.agregarItem(null));
         assertTrue(reserva.getItems().isEmpty());
     }
 

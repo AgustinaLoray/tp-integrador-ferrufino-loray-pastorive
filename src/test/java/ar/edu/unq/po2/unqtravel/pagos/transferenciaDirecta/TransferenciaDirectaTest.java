@@ -1,5 +1,6 @@
 package ar.edu.unq.po2.unqtravel.pagos.transferenciaDirecta;
 
+import ar.edu.unq.po2.unqtravel.Excepciones.Excepciones;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
@@ -37,7 +38,7 @@ class TransferenciaDirectaTest {
                 .when(api).validar("viaje.unq");
         TransferenciaDirecta transferencia = new TransferenciaDirecta(api, "viaje.unq");
 
-        assertThrows(IllegalArgumentException.class, () -> transferencia.procesarPago(80));
+        assertThrows(Excepciones.class, () -> transferencia.procesarPago(80));
 
         verify(api).validar("viaje.unq");
         verifyNoMoreInteractions(api);
@@ -50,7 +51,7 @@ class TransferenciaDirectaTest {
                 .when(api).ejecutarTransaccion();
         TransferenciaDirecta transferencia = new TransferenciaDirecta(api, "viaje.unq");
 
-        assertThrows(IllegalStateException.class, () -> transferencia.procesarPago(80));
+        assertThrows(Excepciones.class, () -> transferencia.procesarPago(80));
 
         InOrder orden = inOrder(api);
         orden.verify(api).validar("viaje.unq");

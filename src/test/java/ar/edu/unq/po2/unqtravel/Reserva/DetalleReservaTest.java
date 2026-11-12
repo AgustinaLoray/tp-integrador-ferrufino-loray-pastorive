@@ -7,6 +7,7 @@ import static org.mockito.Mockito.mock;
 import org.junit.jupiter.api.Test;
 
 import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
+import ar.edu.unq.po2.unqtravel.Excepciones.Excepciones;
 
 class DetalleReservaTest {
 
@@ -25,9 +26,9 @@ class DetalleReservaTest {
     void validaItemPrecioYCantidad() {
         Item item = mock(Item.class);
 
-        assertThrows(NullPointerException.class, () -> new DetalleReserva(null, 10.0, 1));
-        assertThrows(IllegalArgumentException.class, () -> new DetalleReserva(item, -1.0, 1));
-        assertThrows(IllegalArgumentException.class, () -> new DetalleReserva(item, Double.NaN, 1));
-        assertThrows(IllegalArgumentException.class, () -> new DetalleReserva(item, 10.0, 0));
+        assertThrows(Excepciones.class, () -> new DetalleReserva(null, 10.0, 1));
+        assertThrows(Excepciones.class, () -> new DetalleReserva(item, -1.0, 1));
+        assertThrows(Excepciones.class, () -> new DetalleReserva(item, Double.NaN, 1));
+        assertThrows(Excepciones.class, () -> new DetalleReserva(item, 10.0, 0));
     }
 }

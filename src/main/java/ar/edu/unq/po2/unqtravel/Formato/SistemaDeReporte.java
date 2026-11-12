@@ -13,6 +13,7 @@ import java.util.Set;
 import ar.edu.unq.po2.unqtravel.Catalogo.Catalogo.Catalogo;
 import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
 import ar.edu.unq.po2.unqtravel.Catalogo.PaqueteTuristico.PaqueteTuristico;
+import ar.edu.unq.po2.unqtravel.Excepciones.Excepciones;
 import ar.edu.unq.po2.unqtravel.Estados.Cancelada;
 import ar.edu.unq.po2.unqtravel.Reserva.DetalleReserva;
 import ar.edu.unq.po2.unqtravel.Reserva.Reserva;
@@ -120,7 +121,7 @@ public class SistemaDeReporte {
             Set<Item> paquetesEnRecorrido) {
         if (item instanceof PaqueteTuristico paquete) {
             if (!paquetesEnRecorrido.add(paquete)) {
-                throw new IllegalArgumentException("La composición de paquetes contiene un ciclo.");
+                throw new Excepciones("La composición de paquetes contiene un ciclo.");
             }
             try {
                 for (Item componente : paquete.getItems()) {
@@ -144,7 +145,7 @@ public class SistemaDeReporte {
             Set<Item> paquetesEnRecorrido) {
         if (item instanceof PaqueteTuristico paquete) {
             if (!paquetesEnRecorrido.add(paquete)) {
-                throw new IllegalArgumentException("La composición de paquetes contiene un ciclo.");
+                throw new Excepciones("La composición de paquetes contiene un ciclo.");
             }
             try {
                 for (Item componente : paquete.getItems()) {
@@ -207,7 +208,7 @@ public class SistemaDeReporte {
     private void recolectarOperadores(Item item, Set<String> operadores, Set<Item> paquetesEnRecorrido) {
         if (item instanceof PaqueteTuristico paquete) {
             if (!paquetesEnRecorrido.add(paquete)) {
-                throw new IllegalArgumentException("La composición de paquetes contiene un ciclo.");
+                throw new Excepciones("La composición de paquetes contiene un ciclo.");
             }
             try {
                 for (Item componente : paquete.getItems()) {

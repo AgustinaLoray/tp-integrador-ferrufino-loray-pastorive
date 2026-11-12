@@ -27,13 +27,13 @@ class ReservaTest {
         LocalDate inicio = LocalDate.of(2026, 11, 10);
         LocalDate fin = LocalDate.of(2026, 11, 12);
 
-        assertThrows(IllegalArgumentException.class, () -> new Reserva(null, fin, 1, new PuntoEncuentro(0)));
-        assertThrows(IllegalArgumentException.class, () -> new Reserva(inicio, null, 1, new PuntoEncuentro(0)));
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(Excepciones.class, () -> new Reserva(null, fin, 1, new PuntoEncuentro(0)));
+        assertThrows(Excepciones.class, () -> new Reserva(inicio, null, 1, new PuntoEncuentro(0)));
+        assertThrows(Excepciones.class,
                 () -> new Reserva(fin, inicio, 1, new PuntoEncuentro(0)));
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(Excepciones.class,
                 () -> new Reserva(inicio, fin, 0, new PuntoEncuentro(0)));
-        assertThrows(NullPointerException.class, () -> new Reserva(inicio, fin, 1, null));
+        assertThrows(Excepciones.class, () -> new Reserva(inicio, fin, 1, null));
     }
 
     @Test
@@ -56,9 +56,9 @@ class ReservaTest {
         Item item = mock(Item.class);
 
         assertThrows(Excepciones.class, () -> reserva.cambiarEstado(new Confirmada()));
-        assertThrows(NullPointerException.class, () -> reserva.cambiarEstado(null));
-        assertThrows(NullPointerException.class, () -> reserva.agregarItemDirecto(null));
-        assertThrows(NullPointerException.class, () -> reserva.agregarItemPendiente(null));
+        assertThrows(Excepciones.class, () -> reserva.cambiarEstado(null));
+        assertThrows(Excepciones.class, () -> reserva.agregarItemDirecto(null));
+        assertThrows(Excepciones.class, () -> reserva.agregarItemPendiente(null));
         reserva.agregarItemPendiente(item);
         reserva.quitarItemPendiente(item);
         reserva.cancelar();
@@ -90,8 +90,8 @@ class ReservaTest {
         Reserva reserva = nuevaReserva();
         Item item = mock(Item.class);
 
-        assertThrows(NullPointerException.class, () -> reserva.getCostoItem(null));
-        assertThrows(IllegalStateException.class, () -> reserva.getCostoItem(item));
+        assertThrows(Excepciones.class, () -> reserva.getCostoItem(null));
+        assertThrows(Excepciones.class, () -> reserva.getCostoItem(item));
         assertEquals(0.0, reserva.getCostoServicios());
         assertEquals(0.0f, reserva.getValorTotal());
         assertEquals(1, reserva.getCantidadPasajeros());

@@ -1,5 +1,6 @@
 package ar.edu.unq.po2.unqtravel.pagos.tarjetaInternacional;
 
+import ar.edu.unq.po2.unqtravel.Excepciones.Excepciones;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
@@ -44,7 +45,7 @@ class TarjetaInternacionalTest {
         TarjetaInternacional tarjeta =
                 new TarjetaInternacional(api, 123456, 321, vencimiento);
 
-        assertThrows(IllegalArgumentException.class, () -> tarjeta.procesarPago(150));
+        assertThrows(Excepciones.class, () -> tarjeta.procesarPago(150));
 
         verify(api).validar(123456, 321, vencimiento);
         verifyNoMoreInteractions(api);
@@ -59,7 +60,7 @@ class TarjetaInternacionalTest {
         TarjetaInternacional tarjeta =
                 new TarjetaInternacional(api, 123456, 321, vencimiento);
 
-        assertThrows(IllegalStateException.class, () -> tarjeta.procesarPago(150));
+        assertThrows(Excepciones.class, () -> tarjeta.procesarPago(150));
 
         InOrder orden = inOrder(api);
         orden.verify(api).validar(123456, 321, vencimiento);

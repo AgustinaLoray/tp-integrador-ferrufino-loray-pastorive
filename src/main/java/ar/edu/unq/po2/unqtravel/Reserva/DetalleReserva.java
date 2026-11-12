@@ -1,8 +1,7 @@
 package ar.edu.unq.po2.unqtravel.Reserva;
 
-import java.util.Objects;
-
 import ar.edu.unq.po2.unqtravel.Catalogo.Item.Item;
+import ar.edu.unq.po2.unqtravel.Excepciones.Excepciones;
 
 public class DetalleReserva {
     private final Item item;
@@ -10,13 +9,16 @@ public class DetalleReserva {
     private final int cantidad;
 
     public DetalleReserva(Item item, double precioUnitarioCobrado, int cantidad) {
-        this.item = Objects.requireNonNull(item, "El item no puede ser null");
+        if (item == null) {
+            throw new Excepciones("El item no puede ser null");
+        }
         if (!Double.isFinite(precioUnitarioCobrado) || precioUnitarioCobrado < 0) {
-            throw new IllegalArgumentException("El precio unitario debe ser un número no negativo");
+            throw new Excepciones("El precio unitario debe ser un número no negativo");
         }
         if (cantidad <= 0) {
-            throw new IllegalArgumentException("La cantidad debe ser positiva");
+            throw new Excepciones("La cantidad debe ser positiva");
         }
+        this.item = item;
         this.precioUnitarioCobrado = precioUnitarioCobrado;
         this.cantidad = cantidad;
     }
